@@ -1,6 +1,7 @@
 <template>
   <v-app light>
-  <nav-container></nav-container>
+    <nav-container></nav-container>
+    <router-view></router-view>
   </v-app>
 </template>
 
@@ -8,11 +9,7 @@
   import NavContainer from './widgets/navigation/nav/NavContainer';
   export default {
     components: {
-      NavContainer},
-    data() {
-      return {
-
-      };
+      NavContainer
     }
   };
 </script>
