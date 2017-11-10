@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nav-container">
     <nav-drawer :items="items"></nav-drawer>
     <nav-toolbar></nav-toolbar>
   </div>
