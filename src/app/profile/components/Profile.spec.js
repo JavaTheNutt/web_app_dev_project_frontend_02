@@ -14,7 +14,9 @@ describe('Profile.vue', () => {
     expect(vm.$el.textContent)
     .to.equal('This is the Profile page');
   });
-  /*it('should render with the correct data properties', () => {
-    expect(typeof Profile.data).toBe('function');
-  });*/
+  it('should render with the correct data properties', () => {
+    expect(Profile.data).to.be.a('function');
+    const initialData = Profile.data();
+    expect(initialData.pageName).to.equal('Profile');
+  });
 });
