@@ -18,7 +18,7 @@
       </v-list>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
-        <v-list-tile v-for="item in items" :key="item.title" @click="">
+        <v-list-tile v-for="item in items" :key="item.title" @click="redirect(item.route)">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -45,6 +45,12 @@
     },
     created() {
       NavBus.$on('leftNavToggled', () => this.shown = !this.shown);
+    },
+    methods:{
+      redirect(route){
+        this.$router.push(route);
+      }
     }
   };
+
 </script>

@@ -16,8 +16,8 @@
         name: 'navigation',
         drawer: false,
         items: [
-          { title: 'Home', icon: 'dashboard' },
-          { title: 'About', icon: 'question_answer' }
+          { title: 'Home', icon: 'home', route:'/' },
+          { title: 'Profile', icon: 'person', route: '/profile'}
         ]
       };
     }
