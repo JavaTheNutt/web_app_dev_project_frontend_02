@@ -4,6 +4,14 @@
   "description": "A vue frontend for my finance tracker application",
   "author": "Joe Wemyss <support@javathenutt.com>",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JavaTheNutt/web_app_dev_project_frontend_02"
+  },
+  "bugs": {
+    "url": "https://github.com/JavaTheNutt/web_app_dev_project_frontend_02/issues"
+  },
+  "homepage": "https://github.com/JavaTheNutt/web_app_dev_project_frontend_02#readme",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
