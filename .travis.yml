@@ -4,4 +4,5 @@ node_js:
   - node
   - '8'
 script:
-  - 'npm test'
+  - 'npm run lint'
+  - 'npm run unit'
