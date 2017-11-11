@@ -6,3 +6,8 @@ node_js:
 script:
   - 'npm run lint'
   - 'npm run unit'
+  - 'npm run build'
+deploy:
+  provider: firebase
+  token:
+    secure: "ObzJkqUXmpdwQgSU4HV6R/QU2BxpIDTYOcUTDTKB0hDteWcFumLMs1Vzsz9NECqDvfsGyLYHkPuHxrd0gcwRpAk7b5FYm//ERB/2887gHaTu54Y75dRHUFrkpf6Qze1+gMAHHvUBKkkn9QpgLYuDcr6QWBlp1f/5y2QkJ22LPyooQUIua3iNB3G2S9Gr053JyrPjEilVZlJ3FxhmN9Q44b+RzokDgAe1GURugJMF5Kqa0C44DlN5srZ2vKhNPZGeuN7eC6u93mrbn1LDEwIr8rPT7tw+NQFUA9elFfHaFZSU06UbLm9AvI++7NfHODrrtaXyrNeihI37Nd63JbxmG7TtdrDnDCmqWzRFvCRxzukmgSDSwu6ESjv5snRTOJBJicaRi4z2fyLUlv6XFzk8qVh+icRfUC9xfOwluipSJVXA1DacfuTloEEhYQ0RPju2Y9y/ODXHXlk/0VMaCONjwTMlxpDyDewVXe+kGOxxzaNxz2WxSFvV0c7e0fw5bcMZ8BZFkknIrcHzunsllubXD6lrx6upgOwefX19j3mFwvnU65GexPPiKtqcJR/ETcpA8KCtSrYWXhOYekYcOXT/JXLurwNAS2PYX3jqWAIfmyTNeH4tETmInnFCHgQmDdpMLpUOYKjcDEGeWXfrfgxUMo6ZbhSZbKD2RUo6jDyEqXY="

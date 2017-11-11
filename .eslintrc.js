@@ -39,10 +39,6 @@ module.exports = {
     "prefer-arrow-callback": "error",
     "consistent-return": "error",
     "eqeqeq": "error",
-    "linebreak-style": [
-      "error",
-      "windows"
-    ],
     "quotes": [
       "error",
       "single"
