@@ -1,10 +1,9 @@
-language:
-  node_js
+language: node_js
 node_js:
-  - node
-  - '8'
+- node
+- '8'
 before_install:
-  - 'npm i -g firebase-tools'
+- npm i -g firebase-tools
 script:
   - 'npm run lint'
   - 'npm run unit'
@@ -12,3 +11,4 @@ script:
 deploy:
   provider: firebase
   skip_cleaup: true
+
