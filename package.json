@@ -23,6 +23,7 @@
     "deploy": "firebase deploy"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "vue": "^2.3.3",
     "vue-router": "^2.3.1",
     "vuetify": "^0.16.9",
