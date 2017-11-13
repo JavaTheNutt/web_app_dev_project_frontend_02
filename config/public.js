@@ -1,6 +1,9 @@
 var privateConfig;
 if(process.env.NODE_ENV !== 'production'){
- privateConfig = require('./private');
+  try {
+    privateConfig = require('./private');
+  } catch (e) {
+  }
 }
 export var backendBaseUrl = privateConfig.backendBaseUrl || process.env.BACKEND_BASE_URL;
 
