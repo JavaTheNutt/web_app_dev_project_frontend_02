@@ -17,3 +17,4 @@ selenium-debug.log
 *.swp
 /tst.json
 /config/private.js
+/tst.js
