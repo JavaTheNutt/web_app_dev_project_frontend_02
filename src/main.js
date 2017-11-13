@@ -7,9 +7,12 @@ import './stylus/main.styl';
 import App from './app/App';
 import router from './router';
 import store from './store';
+import firebase from 'firebase';
+import {firebaseKey} from '../config/private';
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
 
+firebase.initializeApp(firebaseKey);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
