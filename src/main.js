@@ -9,9 +9,11 @@ import router from './router';
 import store from './store';
 import firebase from 'firebase';
 import {firebaseKey} from '../config/private';
+import http from './app/service/http';
+
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
-
+Vue.prototype.$http = http;
 firebase.initializeApp(firebaseKey);
 /* eslint-disable no-new */
 new Vue({
