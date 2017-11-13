@@ -8,7 +8,7 @@ import App from './app/App';
 import router from './router';
 import store from './store';
 import firebase from 'firebase';
-import {firebaseKey} from '../config/private';
+import {firebaseKey} from '../config/public';
 import http from './app/service/http';
 
 Vue.use(Vuetify);
