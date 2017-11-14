@@ -10,15 +10,23 @@
 
   export default {
     name: 'nav-container',
-    components:{NavDrawer, NavToolbar},
+    components: {
+      NavDrawer,
+      NavToolbar
+    },
     data() {
       return {
         name: 'navigation',
         drawer: false,
-        items: [
-          { title: 'Home', icon: 'home', route:'/' },
-          { title: 'Profile', icon: 'person', route: '/profile'}
-        ]
+        items: [{
+          title: 'Home',
+          icon: 'home',
+          route: '/'
+        }, {
+          title: 'Profile',
+          icon: 'person',
+          route: '/profile'
+        }]
       };
     }
   };

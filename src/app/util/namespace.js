@@ -15,7 +15,7 @@ export default (module, types) => {
   mapValues(types, (names, type) => {
     newObj[type] = {};
     types[type].forEach(name => {
-      const newKey         = module + ':' + name;
+      const newKey       = module + ':' + name;
       newObj[type][name] = newKey;
     });
   });

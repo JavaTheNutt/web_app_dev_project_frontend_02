@@ -16,7 +16,7 @@ Logger.setLevel(logLevel);
 
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
-Vue.prototype.$http = http;
+Vue.prototype.$http      = http;
 firebase.initializeApp(firebaseKey);
 /* eslint-disable no-new */
 new Vue({

@@ -7,10 +7,11 @@
 </template>
 <script>
   import NavBus from './nav_bus';
+
   export default {
     name: 'nav-toolbar',
-    methods:{
-      emitClick(){
+    methods: {
+      emitClick() {
         NavBus.$emit('leftNavToggled');
       }
     }

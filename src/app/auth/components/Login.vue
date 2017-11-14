@@ -4,8 +4,8 @@
 <script>
   export default {
     name: 'login',
-    methods:{
-      logIn(){
+    methods: {
+      logIn() {
 
       }
     }

@@ -8,11 +8,12 @@
 <script>
   import NavContainer from './widgets/navigation/nav/NavContainer';
   import authTypes from './auth/vuex/types';
+
   export default {
     components: {
       NavContainer
     },
-    created(){
+    created() {
       this.$store.dispatch(authTypes.actions.registerAuthStateListener);
     }
   };

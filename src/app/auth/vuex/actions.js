@@ -11,11 +11,11 @@ export default {
   [types.actions.testCurrentAuthState]: ({commit}) => {
     Logger.info('auth state listener triggered');
     const user = firebase.auth().currentUser;
-    if (user) {
+    if (!user) {
       Logger.info('no user logged in to firebase, logging out locally');
-      return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: true});
+      return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: false});
     }
     Logger.info('user logged in to firebase, logging in locally');
-    return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: false});
+    return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: true});
   }
 };

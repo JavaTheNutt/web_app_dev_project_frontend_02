@@ -36,8 +36,8 @@
     created() {
       NavBus.$on('leftNavToggled', () => this.shown = !this.shown);
     },
-    methods:{
-      redirect(route){
+    methods: {
+      redirect(route) {
         this.$router.push(route);
       }
     }
