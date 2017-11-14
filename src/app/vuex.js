@@ -1,3 +1,3 @@
-import {auth} from './store';
+import {vuex as auth} from './auth';
 
 export default {auth};
