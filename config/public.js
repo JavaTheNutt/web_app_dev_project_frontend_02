@@ -19,6 +19,7 @@ if(!privateConfig){
   backendBaseUrl = privateConfig.backendBaseUrl;
   firebaseKey = privateConfig.firebaseKey;
 }
-export {backendBaseUrl, firebaseKey}
+var logLevel = process.env.LOG_LEVEL || process.env.NODE_ENV === 'development' ? 'trace': 'silent';
+export {backendBaseUrl, firebaseKey, logLevel}
 
 

@@ -8,8 +8,11 @@ import App from './app/App';
 import router from './router';
 import store from './store';
 import firebase from 'firebase';
-import {firebaseKey} from '../config/public';
+import {firebaseKey, logLevel} from '../config/public';
 import http from './app/service/http';
+import * as Logger from 'loglevel';
+
+Logger.setLevel(logLevel);
 
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
