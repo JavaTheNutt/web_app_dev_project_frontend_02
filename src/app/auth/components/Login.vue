@@ -1,7 +1,13 @@
 <template>
   <div style="{margin:20px}">
-    <password-login></password-login>
-    <social-login></social-login>
+    <v-container grid-list-xl>
+      <v-layout>
+        <v-flex>
+          <password-login></password-login>
+          <social-login></social-login>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 <script>

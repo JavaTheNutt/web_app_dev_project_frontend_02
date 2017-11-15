@@ -1,6 +1,8 @@
 <template>
   <v-card>
-    <div class="dialogCard"><login></login></div>
+    <div class="dialogCard">
+      <login></login>
+    </div>
   </v-card>
 </template>
 <script>

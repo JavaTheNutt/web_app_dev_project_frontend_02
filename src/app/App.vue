@@ -1,7 +1,6 @@
 <template>
   <v-app light>
     <nav-container></nav-container>
-    <v-btn fab color="accent" @click.stop="loginClicked">login</v-btn>
     <router-view></router-view>
     <login-dialog></login-dialog>
   </v-app>
@@ -24,11 +23,6 @@
       return{
         loginShown: false
       };
-    },
-    methods:{
-      loginClicked(){
-        Bus.$emit('login_clicked', true);
-      }
     },
     created() {
       this.$store.dispatch(authTypes.actions.registerAuthStateListener);
