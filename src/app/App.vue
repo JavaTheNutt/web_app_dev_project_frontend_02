@@ -22,11 +22,6 @@
       LoginCard,
       NavContainer
     },
-    data(){
-      return{
-        loginShown: false
-      };
-    },
     created() {
       this.$store.dispatch(authTypes.actions.registerAuthStateListener);
     }

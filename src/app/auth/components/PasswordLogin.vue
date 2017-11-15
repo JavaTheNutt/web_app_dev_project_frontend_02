@@ -60,7 +60,6 @@
         if (this.formValid) {
           Logger.info('form has no errors');
           const result = await passwordLogin(this.email, this.password);
-          //Bus.$emit('show_snack', result ? 'Login successful':'Login failed');
           Logger.info(`login result: ${result}`);
           return;
         }

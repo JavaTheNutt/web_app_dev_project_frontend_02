@@ -1,21 +1,25 @@
 <template>
   <v-dialog v-model="loginShown" max-width="700px">
-    <div><login-card></login-card></div>
+    <div>
+      <login-card></login-card>
+    </div>
   </v-dialog>
 </template>
 <script>
   import LoginCard from './LoginCard';
   import Bus from '@/app/events/bus';
-  export default{
+
+  export default {
     name: 'login-dialog',
-    components:{LoginCard},
-    data(){
+    components: {LoginCard},
+    data() {
       return {
         loginShown: false
       };
     },
-    created(){
+    created() {
       Bus.$on('login_clicked', showModal => this.loginShown = showModal);
+      Bus.$on('hide_login', () => this.loginShown = false);
     }
   };
 </script>

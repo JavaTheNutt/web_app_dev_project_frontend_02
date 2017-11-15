@@ -4,7 +4,7 @@
     bottom
     v-model="snackbarShown"
   >{{message}}
-    <v-btn flat color="accent" @click.stop="snackbarShown = false">Close</v-btn>
+    <v-btn flat :color="status === 'success' ? 'success':'accent'" @click.stop="snackbarShown = false">Close</v-btn>
   </v-snackbar>
 </template>
 <script>
@@ -18,18 +18,20 @@
         timeout: 4000,
         bottom: true,
         message: '',
+        status: 'success'
       };
     },
     created(){
-      Bus.$on('show_snack', msg => {
+      Bus.$on('show_snack', (msg, status) => {
         Logger.info('show snack message recived');
-        this.showSnack(msg);
+        this.showSnack(msg, status);
       });
     },
     methods:{
-      showSnack(msg){
+      showSnack(msg, status){
         Logger.info(`show snack message recived. showing "${msg}"`);
         this.message = msg;
+        this.status = status || 'success';
         this.snackbarShown = true;
       }
     }
