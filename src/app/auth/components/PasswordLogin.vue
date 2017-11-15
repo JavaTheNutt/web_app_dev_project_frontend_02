@@ -43,6 +43,7 @@
   import {passwordLogin} from '../service/firebaseService';
   import * as Logger from 'loglevel';
   import {validate as emailValidator} from 'email-validator';
+  import Bus from '@/app/events/bus';
 //
   export default {
     name: 'password-login',
@@ -59,6 +60,7 @@
         if (this.formValid) {
           Logger.info('form has no errors');
           const result = await passwordLogin(this.email, this.password);
+          //Bus.$emit('show_snack', result ? 'Login successful':'Login failed');
           Logger.info(`login result: ${result}`);
           return;
         }

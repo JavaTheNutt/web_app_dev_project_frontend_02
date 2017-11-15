@@ -3,6 +3,7 @@
     <nav-container></nav-container>
     <router-view></router-view>
     <login-dialog></login-dialog>
+    <snackbar></snackbar>
   </v-app>
 </template>
 
@@ -12,9 +13,11 @@
   import LoginCard from './auth/components/LoginCard.vue';
   import LoginDialog from './auth/components/LoginDialog.vue';
   import Bus from './events/bus';
+  import Snackbar from './widgets/snackbar/snackbar';
 
   export default {
     components: {
+      Snackbar,
       LoginDialog,
       LoginCard,
       NavContainer
