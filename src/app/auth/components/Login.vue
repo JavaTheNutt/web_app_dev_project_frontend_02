@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="{margin:20px}">
     <password-login></password-login>
     <social-login></social-login>
   </div>

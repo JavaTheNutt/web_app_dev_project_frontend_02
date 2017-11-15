@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <login></login>
+    <div class="dialogCard"><login></login></div>
   </v-card>
 </template>
 <script>
@@ -10,3 +10,8 @@
     components: {Login}
   };
 </script>
+<style scoped>
+  .dialogCard{
+    padding: 20px;
+  }
+</style>

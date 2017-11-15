@@ -1,6 +1,6 @@
 <template>
   <form novalidate>
-    <div class="form-flex-container">
+    <div class="form-flex-container login-form">
       <div class="form-flex-container--field">
         <v-text-field
           name="emailField"
@@ -56,30 +56,9 @@
 <style scoped>
   .form-flex-container {
     display: flex;
+    flex-direction: column;
   }
-
-  @media all and (max-width: 500px) {
-    .form-flex-container {
-      flex-direction: column;
-    }
-
-    .form-flex-container--field {
-      width: 100%;
-      flex-direction: column;
-    }
-  }
-
-  @media all and (min-width: 500px) {
-    .form-flex-container {
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
-
-    .form-flex-container--field {
-      margin: 10px;
-      width: 40%;
-    }
+  .loginForm{
+    margin: 20px;
   }
 </style>
