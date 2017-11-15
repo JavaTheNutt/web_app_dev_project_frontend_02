@@ -14,3 +14,4 @@ export const passwordLogin = async (email, password) => {
     return false;
   }
 };
+export const logOut = () => firebase.auth().signOut();

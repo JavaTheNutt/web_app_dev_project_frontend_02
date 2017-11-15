@@ -35,6 +35,5 @@
         this.snackbarShown = true;
       }
     }
-
   };
 </script>
