@@ -1,7 +1,9 @@
 <template>
   <div>
-    <v-btn dark color="error">Sign in with google</v-btn>
-    <v-btn dark color="primary">Sign in with facebook</v-btn>
+    <div class="btn-container">
+      <v-btn dark color="error" fab><i class="fa fa-google fa-3x"></i></v-btn>
+      <v-btn dark color="primary" fab><i class="fa fa-facebook fa-3x"></i></v-btn>
+    </div>
   </div>
 </template>
 <script>
@@ -10,3 +12,11 @@
     name: 'social-login'
   };
 </script>
+<style scoped>
+.btn-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+</style>

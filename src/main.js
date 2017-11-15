@@ -11,7 +11,7 @@ import firebase from 'firebase';
 import {firebaseKey, logLevel} from '../config/public';
 import http from './app/service/http';
 import * as Logger from 'loglevel';
-
+require('font-awesome/css/font-awesome.css');
 Logger.setLevel(logLevel);
 
 Vue.use(Vuetify);
