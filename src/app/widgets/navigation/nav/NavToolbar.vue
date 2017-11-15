@@ -3,7 +3,7 @@
     <v-toolbar-side-icon @click.stop="emitClick"></v-toolbar-side-icon>
     <v-toolbar-title class="white--text">Title</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn color="accent" @click.stop="loginClicked">Login</v-btn>
+    <v-btn color="warning"  @click.stop="loginClicked">Login</v-btn>
   </v-toolbar>
 </template>
 <script>

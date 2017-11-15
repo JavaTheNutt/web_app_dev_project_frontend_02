@@ -1,9 +1,11 @@
 <template>
-  <div style="{margin:20px}">
+  <div >
     <v-container grid-list-xl>
-      <v-layout>
+      <v-layout column>
         <v-flex>
           <password-login></password-login>
+        </v-flex>
+        <v-flex>
           <social-login></social-login>
         </v-flex>
       </v-layout>

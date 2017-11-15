@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import Vuetify from 'vuetify';
+import VeeValidate from 'vee-validate';
 import './stylus/main.styl';
 
 import App from './app/App';
@@ -15,6 +16,7 @@ require('font-awesome/css/font-awesome.css');
 Logger.setLevel(logLevel);
 
 Vue.use(Vuetify);
+Vue.use(VeeValidate);
 Vue.config.productionTip = false;
 Vue.prototype.$http      = http;
 firebase.initializeApp(firebaseKey);
