@@ -28,7 +28,30 @@
             v-validate="'required|min:6'"
             data-vv-name="password"
             :error-messages="errors.collect('password')"
-            ref="passwordField"></v-text-field>
+            ref="password"></v-text-field>
+        </v-flex>
+        <v-flex v-show="createAccountTicked">
+          <v-text-field
+            name="confirmPasswordField"
+            label="Confirm your Password"
+            hint="At least 6 characters"
+            v-model="confirmPassword"
+            :type="passwordShown ? 'text' : 'password'"
+            min="6"
+            required
+            :append-icon="passwordShown ? 'visibility_off': 'visibility'"
+            :append-icon-cb="()=>(passwordShown = !passwordShown)"
+            v-validate="'required|confirmed:$password'"
+            data-vv-name="confirmPassword"
+            :error-messages="errors.collect('confirmPassword')"></v-text-field>
+        </v-flex>
+        <v-flex>
+          <v-checkbox label="Create new account?"
+                      v-model="createAccountTicked"
+                      color="info"
+                      value="yes"
+                      hide-details></v-checkbox>
+
         </v-flex>
       </v-layout>
       <v-layout row>
@@ -44,33 +67,49 @@
   import * as Logger from 'loglevel';
   import {validate as emailValidator} from 'email-validator';
   import Bus from '@/app/events/bus';
-//
+  //
   export default {
     name: 'password-login',
     data() {
       return {
         email: '',
         password: '',
-        passwordShown: false
+        confirmPassword: '',
+        passwordShown: false,
+        createAccountTicked: false,
       };
     },
     methods: {
       async logIn() {
         Logger.info('log in clicked');
-        if (this.formValid) {
-          Logger.info('form has no errors');
-          const result = await passwordLogin(this.email, this.password);
-          Logger.info(`login result: ${result}`);
+        if (!this.formValid) {
+          Logger.info(`errors: ${JSON.stringify(this.errors)}`);
+          Logger.info('the form has errors');
           return;
         }
-        Logger.info('the form has errors');
+        Logger.info('form has no errors');
+        const result = await passwordLogin(this.email, this.password);
+        Logger.info(`login result: ${result}`);
       }
     },
-    computed:{
-      formValid(){
-        return this.fields.email.dirty && this.fields.password.dirty && this.errors.collect('email').length + this.errors.collect('password').length === 0;
+    computed: {
+      formValid() {
+        return !this.createAccountTicked ? this.standardFieldsValid : this.allFieldsValid;
+      },
+      standardFieldsInteractedWith() {
+        return this.fields.email.dirty && this.fields.password.dirty;
+      },
+      allFieldsInteractedWith() {
+        return this.standardFieldsInteractedWith && !!this.fields.confirmPassword && this.fields.confirmPassword.dirty;
+      },
+      standardFieldsValid() {
+        return this.standardFieldsInteractedWith && this.errors.collect('email').length + this.errors.collect('password').length === 0;
+      },
+      allFieldsValid() {
+        return this.allFieldsInteractedWith && this.errors.collect('confirmPassword').length === 0;
       }
     }
+
   };
 </script>
 <style scoped>
