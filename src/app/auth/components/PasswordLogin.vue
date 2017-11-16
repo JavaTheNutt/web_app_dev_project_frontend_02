@@ -59,6 +59,11 @@
           <v-btn :disabled="!formValid" color="warning" class="white--text" @click.stop="logIn">Log In</v-btn>
         </v-flex>
       </v-layout>
+      <v-layout v-if="hasError">
+        <v-flex>
+          <p>{{errorMessage}}</p>
+        </v-flex>
+      </v-layout>
     </v-container>
   </form>
 </template>
@@ -77,12 +82,14 @@
         confirmPassword: '',
         passwordShown: false,
         createAccountTicked: false,
+        errorMessage: ''
       };
     },
     methods: {
       async logIn() {
         Logger.info('log in clicked');
         if (!this.formValid) {
+          this.errorMessage = '';
           Logger.info(`errors: ${JSON.stringify(this.errors)}`);
           Logger.info('the form has errors');
           return;
@@ -90,6 +97,9 @@
         Logger.info('form has no errors');
         const result = !this.createAccountTicked ? await passwordLogin(this.email, this.password) :
           await signUpWithEmailPassword(this.email, this.password);
+        if(result.error){
+          this.errorMessage = result.error.message;
+        }
         Logger.info(`login result: ${result}`);
       }
     },
@@ -108,6 +118,9 @@
       },
       allFieldsValid() {
         return this.allFieldsInteractedWith && this.errors.collect('confirmPassword').length === 0;
+      },
+      hasError(){
+        return this.errorMessage.length > 0;
       }
     }
   };

@@ -11,8 +11,8 @@ export const passwordLogin = async (email, password) => {
     return true;
   } catch (e) {
     Logger.error(`login failed: ${e}`);
-    Bus.$emit('show_snack', 'Login failed', 'err');
-    return false;
+    //Bus.$emit('show_snack', handleFirebaseError(e.code), 'err');
+    return {error: {message: handleFirebaseError(e.code)}};
   }
 };
 export const logOut        = () => firebase.auth().signOut();
@@ -26,7 +26,28 @@ export const signUpWithEmailPassword = async (email, password) => {
     return true;
   } catch (err) {
     Logger.error(`error while signing up, ${err}`);
-    Bus.$emit('show_snack', 'Sign up failed', 'err');
-    return false;
+    //Bus.$emit('show_snack', handleFirebaseError(err.code), 'err');
+    return {error: {message: handleFirebaseError(err.code)}};
+  }
+};
+export const handleFirebaseError     = errCode => {
+  switch (errCode) {
+  case 'auth/user-not-found':
+    return 'Email is not registered on the system';
+    break;
+  case 'auth/wrong-password':
+    return 'Password is incorrect';
+    break;
+  case 'auth/email-already-in-use':
+    return 'The specified email address is already in use';
+    break;
+  case 'auth/invalid-email':
+    return 'The specified email address is invalid';
+    break;
+  case 'auth/weak-password':
+    return 'The specified password is too weak';
+    break;
+  default:
+    return 'An unknown error has occurred ';
   }
 };
