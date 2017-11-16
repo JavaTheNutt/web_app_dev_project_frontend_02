@@ -63,7 +63,7 @@
   </form>
 </template>
 <script>
-  import {passwordLogin} from '../service/firebaseService';
+  import {passwordLogin, signUpWithEmailPassword} from '../service/firebaseService';
   import * as Logger from 'loglevel';
   import {validate as emailValidator} from 'email-validator';
   import Bus from '@/app/events/bus';
@@ -88,7 +88,8 @@
           return;
         }
         Logger.info('form has no errors');
-        const result = await passwordLogin(this.email, this.password);
+        const result = !this.createAccountTicked ? await passwordLogin(this.email, this.password) :
+          await signUpWithEmailPassword(this.email, this.password);
         Logger.info(`login result: ${result}`);
       }
     },
@@ -116,6 +117,7 @@
     display: flex;
     flex-direction: column;
   }
+
   .loginForm {
     margin: 20px;
   }
