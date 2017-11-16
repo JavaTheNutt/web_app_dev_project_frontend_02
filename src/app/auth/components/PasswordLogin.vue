@@ -109,7 +109,6 @@
         return this.allFieldsInteractedWith && this.errors.collect('confirmPassword').length === 0;
       }
     }
-
   };
 </script>
 <style scoped>
@@ -117,7 +116,6 @@
     display: flex;
     flex-direction: column;
   }
-
   .loginForm {
     margin: 20px;
   }
