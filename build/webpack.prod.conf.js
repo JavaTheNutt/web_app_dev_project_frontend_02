@@ -114,7 +114,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         urlPattern: /^https:\/\/fonts\.gstatic\.com\//,
         handler: 'cacheFirst'
       }, {
-        urlPattern: /index\.html/,
+        urlPattern: "'/'",
         handler: 'networkFirst'
       }]
     })
