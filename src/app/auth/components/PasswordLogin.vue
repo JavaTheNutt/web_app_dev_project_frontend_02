@@ -56,8 +56,11 @@
         </v-flex>
       </v-layout>
       <v-layout row>
-        <v-flex>
-          <v-btn :disabled="!formValid" color="warning" class="white--text" @click.stop="logIn">Log In</v-btn>
+        <v-flex v-if="loading">
+          <v-progress-circular indeterminate color="primary" ></v-progress-circular>
+        </v-flex>
+        <v-flex v-if="!loading">
+          <v-btn :disabled="!formValid"  color="warning" class="white--text" @click.stop="logIn">Log In</v-btn>
         </v-flex>
       </v-layout>
       <v-layout v-if="hasError">
@@ -73,7 +76,7 @@
   import * as Logger from 'loglevel';
   import {validate as emailValidator} from 'email-validator';
   import Bus from '@/app/events/bus';
-  //
+
   export default {
     name: 'password-login',
     data() {
@@ -84,7 +87,7 @@
         passwordShown: false,
         createAccountTicked: false,
         errorMessage: '',
-        buttonShown: true
+        loading: false
       };
     },
     methods: {
@@ -96,20 +99,20 @@
           Logger.info('the form has errors');
           return;
         }
+        this.loading = true;
         Logger.info('form has no errors');
-        this.buttonShown = false;
         const result = !this.createAccountTicked ? await passwordLogin(this.email, this.password) :
           await signUpWithEmailPassword(this.email, this.password);
         if(result.error){
           this.errorMessage = result.error.message;
         }
-        this.buttonShown = true;
+        this.loading = false;
         Logger.info(`login result: ${result}`);
       }
     },
     computed: {
       formValid() {
-        return this.buttonShown &&!this.createAccountTicked ? this.standardFieldsValid : this.allFieldsValid;
+        return !this.createAccountTicked ? this.standardFieldsValid : this.allFieldsValid;
       },
       standardFieldsInteractedWith() {
         return this.fields.email.dirty && this.fields.password.dirty;
