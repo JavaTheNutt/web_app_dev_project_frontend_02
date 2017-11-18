@@ -11,6 +11,7 @@
             required
             v-validate="'required|email'"
             data-vv-name="email"
+            data-vv-delay="1000"
             :error-messages="errors.collect('email')"
             ref="emailField"></v-text-field>
         </v-flex>
@@ -82,7 +83,8 @@
         confirmPassword: '',
         passwordShown: false,
         createAccountTicked: false,
-        errorMessage: ''
+        errorMessage: '',
+        buttonShown: true
       };
     },
     methods: {
@@ -95,17 +97,19 @@
           return;
         }
         Logger.info('form has no errors');
+        this.buttonShown = false;
         const result = !this.createAccountTicked ? await passwordLogin(this.email, this.password) :
           await signUpWithEmailPassword(this.email, this.password);
         if(result.error){
           this.errorMessage = result.error.message;
         }
+        this.buttonShown = true;
         Logger.info(`login result: ${result}`);
       }
     },
     computed: {
       formValid() {
-        return !this.createAccountTicked ? this.standardFieldsValid : this.allFieldsValid;
+        return this.buttonShown &&!this.createAccountTicked ? this.standardFieldsValid : this.allFieldsValid;
       },
       standardFieldsInteractedWith() {
         return this.fields.email.dirty && this.fields.password.dirty;
