@@ -1,7 +1,6 @@
 import axios from 'axios';
-//const config = require('../../../../config/public');
-//import {backendBaseUrl} from '../../../../config/public';
+import {backendBaseUrl} from '@/app/config';
 
 export default axios.create({
-  baseURL: 'localhost:3000/'
+  baseURL: backendBaseUrl
 });

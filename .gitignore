@@ -16,6 +16,5 @@ selenium-debug.log
 *.sln
 *.swp
 /tst.json
-/config/private.js
 /tst.js
 /.env
