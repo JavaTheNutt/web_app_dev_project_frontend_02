@@ -18,3 +18,4 @@ selenium-debug.log
 /tst.json
 /config/private.js
 /tst.js
+/.env
