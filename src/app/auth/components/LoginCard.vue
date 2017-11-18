@@ -1,5 +1,8 @@
 <template>
   <v-card>
+    <v-card-title primary-title>
+      <h3 class="headline mb-0">Login/Sign Up to access this site</h3>
+    </v-card-title>
     <div class="dialogCard">
       <login></login>
     </div>
