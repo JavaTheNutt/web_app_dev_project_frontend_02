@@ -22,7 +22,7 @@ describe('firebaseService', () => {
     it('should return false for unsuccessful password logins', async () => {
       signInWithEmailAndPasswordStub.throws(Error('an error has occurred'));
       const result = await firebaseService.passwordLogin('joebloggs@test.com', 'zzzzzz');
-      expect(result).to.be.false;
+      expect(result).to.eql({error:{message: 'An unknown error has occurred'}});
     });
   });
 });

@@ -11,7 +11,7 @@ describe('Profile.vue', () => {
   it('should render correct contents', () => {
     const Constructor = Vue.extend(Profile);
     const vm          = new Constructor().$mount();
-    expect(vm.$el.textContent).to.equal('This is the Profile page');
+    expect(vm.$el.textContent).to.contain('Welcome to your Profile page');
   });
   it('should render with the correct data properties', () => {
     expect(Profile.data).to.be.a('function');

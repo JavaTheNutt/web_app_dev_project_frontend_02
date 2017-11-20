@@ -8,10 +8,10 @@ describe('Home.vue', () => {
     Constructor   = Vue.extend(Home);
     HomeComponent = new Constructor().$mount();
   });
-  it('should render correct contents', () => {
+  it('should render the header', () => {
     const Constructor = Vue.extend(Home);
     const vm          = new Constructor().$mount();
-    expect(vm.$el.textContent).to.contain('This is the home page');
+    expect(vm.$el.textContent).to.contain('Welcome to Finance Tracker');
   });
   /*it('should render with the correct data properties', () => {
     expect(Home.data).to.be.a('function');

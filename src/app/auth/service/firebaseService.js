@@ -48,6 +48,6 @@ export const handleFirebaseError     = errCode => {
     return 'The specified password is too weak';
     break;
   default:
-    return 'An unknown error has occurred ';
+    return 'An unknown error has occurred';
   }
 };
