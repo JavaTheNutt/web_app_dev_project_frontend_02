@@ -11,7 +11,6 @@ export const passwordLogin = async (email, password) => {
     return true;
   } catch (e) {
     Logger.error(`login failed: ${e}`);
-    //Bus.$emit('show_snack', handleFirebaseError(e.code), 'err');
     return {error: {message: handleFirebaseError(e.code)}};
   }
 };

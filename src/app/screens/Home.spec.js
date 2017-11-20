@@ -1,5 +1,6 @@
 import Home from '@/app/screens/Home';
 import Vue from 'vue';
+Vue.config.silent = true;
 
 describe('Home.vue', () => {
   let Constructor, HomeComponent;

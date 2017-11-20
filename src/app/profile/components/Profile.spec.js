@@ -1,6 +1,7 @@
 import Profile from '@/app/profile/components/Profile';
 import Vue from 'vue';
 
+Vue.config.silent = true;
 describe('Profile.vue', () => {
   let Constructor, ProfileComponent;
 
