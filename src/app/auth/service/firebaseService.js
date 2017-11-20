@@ -2,6 +2,9 @@ import firebase from 'firebase';
 import * as Logger from 'loglevel';
 import Bus from '@/app/events/bus';
 
+
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+
 export const passwordLogin = async (email, password) => {
   try {
     await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -28,6 +31,10 @@ export const signUpWithEmailPassword = async (email, password) => {
     //Bus.$emit('show_snack', handleFirebaseError(err.code), 'err');
     return {error: {message: handleFirebaseError(err.code)}};
   }
+};
+export const signinWithGoogle = async () => {
+  const res = await firebase.auth().signInWithPopup(googleProvider);
+  Logger.info(`result of google sign in: ${JSON.stringify(res)}`);
 };
 export const handleFirebaseError     = errCode => {
   switch (errCode) {

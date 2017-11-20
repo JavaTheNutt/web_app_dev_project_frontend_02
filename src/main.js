@@ -12,6 +12,8 @@ import firebase from 'firebase';
 import {firebaseKey, logLevel} from './app/config/index';
 import http from './app/service/http';
 import * as Logger from 'loglevel';
+
+
 Logger.setLevel(logLevel);
 Vue.use(Vuetify);
 Vue.use(VeeValidate);
