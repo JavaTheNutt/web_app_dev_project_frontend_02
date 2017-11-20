@@ -35,5 +35,16 @@
     <!-- Todo: only include in production -->
     <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
     <!-- built files will be auto injected -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109938662-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      // eslint-disable-next-line require-jsdoc,prefer-rest-params
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-109938662-1');
+    </script>
   </body>
 </html>
