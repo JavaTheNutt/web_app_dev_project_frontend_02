@@ -25,4 +25,12 @@ describe('firebaseService', () => {
       expect(result).to.eql({error:{message: 'An unknown error has occurred'}});
     });
   });
+  describe('error handling', () => {
+    it('should handle incorrect passwords');
+    it('should handle email address in use errors');
+    it('should handle malformed email errors');
+    it('should handle uer not found errors');
+    it('should handle weak password errors');
+    it('should handle unknown errors');
+  })
 });
