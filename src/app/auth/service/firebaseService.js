@@ -3,7 +3,8 @@ import * as Logger from 'loglevel';
 import Bus from '@/app/events/bus';
 
 
-const googleProvider = new firebase.auth.GoogleAuthProvider();
+const googleProvider   = new firebase.auth.GoogleAuthProvider();
+const facebookProvider = new firebase.auth.FacebookAuthProvider();
 
 export const passwordLogin = async (email, password) => {
   try {
@@ -28,15 +29,20 @@ export const signUpWithEmailPassword = async (email, password) => {
     return true;
   } catch (err) {
     Logger.error(`error while signing up, ${err}`);
-    //Bus.$emit('show_snack', handleFirebaseError(err.code), 'err');
     return {error: {message: handleFirebaseError(err.code)}};
   }
 };
-export const signinWithGoogle = async () => {
-  const res = await firebase.auth().signInWithPopup(googleProvider);
-  Logger.info(`result of google sign in: ${JSON.stringify(res)}`);
+export const signinWithGoogle        = async () => {
+  const result = await signinWithThirdParty(googleProvider);
+  Logger.info(`result of google sign in ${JSON.stringify(result)}`);
 };
-export const handleFirebaseError     = errCode => {
+export const signinWithFacebook      = async () => {
+  const result = await signinWithThirdParty(facebookProvider);
+  Logger.info(`result of facebook signin is: ${JSON.stringify(result)}`);
+};
+
+export const signinWithThirdParty = async provider => await firebase.auth().signInWithPopup(provider);
+export const handleFirebaseError  = errCode => {
   switch (errCode) {
   case 'auth/user-not-found':
     return 'Email is not registered on the system';
@@ -53,6 +59,8 @@ export const handleFirebaseError     = errCode => {
   case 'auth/weak-password':
     return 'The specified password is too weak';
     break;
+  case 'auth/account-exists-with-different-credential':
+    return 'You already signed into this app using the same email, but from a different provider';
   default:
     return 'An unknown error has occurred';
   }
