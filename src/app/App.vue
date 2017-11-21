@@ -10,6 +10,7 @@
 <script>
   import NavContainer from './widgets/navigation/nav/NavContainer';
   import authTypes from './auth/vuex/types';
+  import {handleAuthRedirect} from './auth/service/firebaseService';
   import LoginCard from './auth/components/LoginCard.vue';
   import LoginDialog from './auth/components/LoginDialog.vue';
   import Bus from './events/bus';
@@ -28,6 +29,7 @@
     },
     created() {
       this.$store.dispatch(authTypes.actions.registerAuthStateListener);
+      handleAuthRedirect();
     }
   };
 </script>

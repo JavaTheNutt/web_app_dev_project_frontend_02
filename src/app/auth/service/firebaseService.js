@@ -20,7 +20,7 @@ export const passwordLogin = async (email, password) => {
 };
 export const logOut        = () => firebase.auth().signOut();
 
-export const signUpWithEmailPassword = async (email, password) => {
+export const signUpWithEmailPassword      = async (email, password) => {
   try {
     await firebase.auth().createUserWithEmailAndPassword(email, password);
     Logger.info('sign up assumed successful');
@@ -32,17 +32,25 @@ export const signUpWithEmailPassword = async (email, password) => {
     return {error: {message: handleFirebaseError(err.code)}};
   }
 };
-export const signinWithGoogle        = async () => {
-  const result = await signinWithThirdParty(googleProvider);
+export const signinWithGoogle             = async () => {
+  const result = await /*signinWithThirdPartyPopup(googleProvider)*/ signInWithThridPartyRedirect(googleProvider);
   Logger.info(`result of google sign in ${JSON.stringify(result)}`);
 };
-export const signinWithFacebook      = async () => {
-  const result = await signinWithThirdParty(facebookProvider);
+export const signinWithFacebook           = async () => {
+  const result = await /*signinWithThirdPartyPopup(facebookProvider)*/ signInWithThridPartyRedirect(facebookProvider);
   Logger.info(`result of facebook signin is: ${JSON.stringify(result)}`);
 };
-
-export const signinWithThirdParty = async provider => await firebase.auth().signInWithPopup(provider);
-export const handleFirebaseError  = errCode => {
+export const signInWithThridPartyRedirect = async provider => await firebase.auth().signInWithRedirect(provider);
+export const signinWithThirdPartyPopup    = async provider => await firebase.auth().signInWithPopup(provider);
+export const handleAuthRedirect           = async () => {
+  const result = await firebase.auth().getRedirectResult();
+  if (result.credential) {
+    Logger.info('redirect contains a credential');
+    return;
+  }
+  Logger.info('result does not contain a credential');
+};
+export const handleFirebaseError          = errCode => {
   switch (errCode) {
   case 'auth/user-not-found':
     return 'Email is not registered on the system';
