@@ -20,5 +20,15 @@ export default {
     Logger.info('user logged in to firebase, logging in locally');
     router.push('/profile');
     return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: true});
-  }
+  },
+  [types.actions.setProviderIds]: ({commit}, {newProviderId, preferredProviderId, credential}) => commit(types.mutations.SET_PROVIDER_IDS, {
+    newProviderId,
+    preferredProviderId,
+    credential
+  }),
+  [types.actions.resetProviderIds]: ({commit}) => commit(types.mutations.SET_PROVIDER_IDS, {
+    newProviderId: '',
+    preferredProviderId: '',
+    credential: {}
+  })
 };

@@ -1,3 +1,8 @@
 export default {
-  loggedIn: false
+  loggedIn: false,
+  linkAccounts:{
+    newProviderId: '',
+    preferredProviderId: '',
+    credential: {}
+  }
 };
