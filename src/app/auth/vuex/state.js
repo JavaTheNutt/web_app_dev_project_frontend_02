@@ -6,6 +6,7 @@ export default {
     credential: {}
   },
   user:{
-    displayName: ''
+    displayName: '',
+    photoUrl: '',
   }
 };

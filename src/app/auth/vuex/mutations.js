@@ -9,5 +9,6 @@ export default {
     state.linkAccounts.preferredProviderId = preferredProviderId;
     state.linkAccounts.credential          = credential;
   },
-  [types.mutations.SET_DISPLAY_NAME]: (state, {userDisplayName}) => state.user.displayName = userDisplayName
+  [types.mutations.SET_DISPLAY_NAME]: (state, {userDisplayName}) => state.user.displayName = userDisplayName,
+  [types.mutations.SET_PHOTO_URL]:(state, {photoUrl}) => state.user.photoUrl = photoUrl
 };

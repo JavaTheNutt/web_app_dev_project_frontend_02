@@ -14,6 +14,7 @@
         </v-list-tile>
       </v-list>
     </v-menu>
+    <v-avatar></v-avatar>
   </v-toolbar>
 </template>
 <script>

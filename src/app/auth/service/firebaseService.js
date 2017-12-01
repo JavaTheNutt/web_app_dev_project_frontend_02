@@ -29,14 +29,17 @@ export const testAuthState                                = user => {
     persistance.clearDisplayName();
     router.push('/');
     store.dispatch(types.actions.resetDisplayName);
+    store.commit(types.mutations.SET_PHOTO_URL, {photoURL: ''});
     return false;
   }
   persistance.setDisplayName(user.displayName);
   store.dispatch(types.actions.setDisplayName, {displayName: user.displayName});
+  store.commit(types.mutations.SET_PHOTO_URL, {photoUrl: fetchProfilePicture(user)});
   Logger.info('user logged in to firebase, logging in locally');
   router.push('/profile');
   return true;
 };
+export const fetchProfilePicture = user => user.photoUrl || '@/assets/defaultProf.png';
 export const signUpWithEmailPassword                      = async (email, password) => {
   try {
     await firebase.auth().createUserWithEmailAndPassword(email, password);
