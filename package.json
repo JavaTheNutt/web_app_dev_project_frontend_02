@@ -29,6 +29,7 @@
     "email-validator": "^1.1.1",
     "firebase": "^4.6.2",
     "font-awesome": "^4.7.0",
+    "localforage": "^1.5.5",
     "loglevel": "^1.6.0",
     "vee-validate": "^2.0.0-rc.21",
     "vue": "^2.3.3",

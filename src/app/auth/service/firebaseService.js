@@ -62,6 +62,7 @@ export const handleAccountLink = async() => {
     const result = await firebase.auth().signInWithPopup(provider);
     Logger.info(`result of signing in with initial account: ${JSON.stringify(result)}`);
     Logger.info(`credential: ${JSON.stringify(providerDetails.credential)}`);
+    //fixme: this errors with an empty object
     const linkResult = await result.user.link(providerDetails.credential);
     Logger.info(`result of link: ${JSON.stringify(linkResult)}`);
   }catch(err){

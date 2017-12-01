@@ -2,6 +2,7 @@ import types from './types';
 import firebase from 'firebase';
 import * as Logger from 'loglevel';
 import router from '@/router';
+import * as persistance from '../service/persistence';
 
 export default {
   [types.actions.registerAuthStateListener]: ({dispatch}) => {
@@ -15,10 +16,14 @@ export default {
     if (!user) {
       Logger.info('no user logged in to firebase, logging out locally');
       router.push('/');
+      persistance.clearDisplayName();
       return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: false});
     }
+
+    persistance.setDisplayName(user.displayName);
     Logger.info('user logged in to firebase, logging in locally');
     router.push('/profile');
+
     return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: true});
   },
   [types.actions.setProviderIds]: ({commit}, {newProviderId, preferredProviderId, credential}) => commit(types.mutations.SET_PROVIDER_IDS, {
