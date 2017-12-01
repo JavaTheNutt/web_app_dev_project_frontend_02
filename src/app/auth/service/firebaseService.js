@@ -28,9 +28,11 @@ export const testAuthState                                = user => {
     Logger.info('no user logged in to firebase, logging out locally');
     persistance.clearDisplayName();
     router.push('/');
+    store.dispatch(types.actions.resetDisplayName);
     return false;
   }
   persistance.setDisplayName(user.displayName);
+  store.dispatch(types.actions.setDisplayName, {displayName: user.displayName});
   Logger.info('user logged in to firebase, logging in locally');
   router.push('/profile');
   return true;

@@ -4,5 +4,8 @@ export default {
     newProviderId: '',
     preferredProviderId: '',
     credential: {}
+  },
+  user:{
+    displayName: ''
   }
 };

@@ -23,5 +23,7 @@ export default {
     newProviderId: '',
     preferredProviderId: '',
     credential: {}
-  })
+  }),
+  [types.actions.setDisplayName]:({commit}, {displayName}) => commit(types.mutations.SET_DISPLAY_NAME, {userDisplayName:displayName}),
+  [types.actions.resetDisplayName]:({commit}) => commit(types.mutations.SET_DISPLAY_NAME, {userDisplayName:''})
 };
