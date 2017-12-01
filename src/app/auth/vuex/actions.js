@@ -1,8 +1,7 @@
 import types from './types';
 import firebase from 'firebase';
 import * as Logger from 'loglevel';
-import router from '@/router';
-import * as persistance from '../service/persistence';
+import * as firebaseService from '../service/firebaseService';
 
 export default {
   [types.actions.registerAuthStateListener]: ({dispatch}) => {
@@ -12,19 +11,8 @@ export default {
   },
   [types.actions.testCurrentAuthState]: ({commit}) => {
     Logger.info('auth state listener triggered');
-    const user = firebase.auth().currentUser;
-    if (!user) {
-      Logger.info('no user logged in to firebase, logging out locally');
-      router.push('/');
-      persistance.clearDisplayName();
-      return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: false});
-    }
+    return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: firebaseService.testAuthState(firebase.auth().currentUser)});
 
-    persistance.setDisplayName(user.displayName);
-    Logger.info('user logged in to firebase, logging in locally');
-    router.push('/profile');
-
-    return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: true});
   },
   [types.actions.setProviderIds]: ({commit}, {newProviderId, preferredProviderId, credential}) => commit(types.mutations.SET_PROVIDER_IDS, {
     newProviderId,

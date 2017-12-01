@@ -3,12 +3,14 @@ import * as Logger from 'loglevel';
 import Bus from '@/app/events/bus';
 import store from '@/store';
 import types from '../vuex/types';
+import * as persistance from './persistence';
+import router from '@/router';
 
 
 const googleProvider   = new firebase.auth.GoogleAuthProvider();
 const facebookProvider = new firebase.auth.FacebookAuthProvider();
 
-export const passwordLogin = async (email, password) => {
+export const passwordLogin                                = async (email, password) => {
   try {
     await firebase.auth().signInWithEmailAndPassword(email, password);
     Logger.info('login assumed succeeded');
@@ -20,8 +22,19 @@ export const passwordLogin = async (email, password) => {
     return {error: {message: handleFirebaseError(e.code)}};
   }
 };
-export const logOut        = () => firebase.auth().signOut();
-
+export const logOut                                       = () => firebase.auth().signOut();
+export const testAuthState                                = user => {
+  if (!user) {
+    Logger.info('no user logged in to firebase, logging out locally');
+    persistance.clearDisplayName();
+    router.push('/');
+    return false;
+  }
+  persistance.setDisplayName(user.displayName);
+  Logger.info('user logged in to firebase, logging in locally');
+  router.push('/profile');
+  return true;
+};
 export const signUpWithEmailPassword                      = async (email, password) => {
   try {
     await firebase.auth().createUserWithEmailAndPassword(email, password);
@@ -52,10 +65,10 @@ export const signinWithFacebook                           = async () => {
     handleSignInError(e, 'facebook.com');
   }
 };
-export const handleAccountLink = async() => {
-  try{
+export const handleAccountLink                            = async () => {
+  try {
     const providerDetails = store.getters[types.getters.getProviders];
-    const providerId = providerDetails.preferredProviderId;
+    const providerId      = providerDetails.preferredProviderId;
     Logger.info(`provider id: ${providerId}`);
     const provider = fetchProviderFromID(providerId);
     Logger.info(`provider: ${JSON.stringify(provider)}`);
@@ -65,9 +78,9 @@ export const handleAccountLink = async() => {
     //fixme: this errors with an empty object
     const linkResult = await result.user.link(providerDetails.credential);
     Logger.info(`result of link: ${JSON.stringify(linkResult)}`);
-  }catch(err){
+  } catch (err) {
     Logger.warn(`error while linking account, ${JSON.stringify(err)}`);
-  }finally {
+  } finally {
     store.dispatch(types.actions.resetProviderIds);
   }
 };
@@ -96,10 +109,14 @@ export const handleSignInError                            = (error, providerId) 
 export const handleAuthExistsWithDifferentCredentialError = async (error, providerId) => {
   Logger.info(`auth exists with different cred, error: ${JSON.stringify(error)}`);
   const providers = await fetchProviders(error.email);
-  store.dispatch(types.actions.setProviderIds, {newProviderId: providerId, preferredProviderId: providers[0], credential: error.credential});
+  store.dispatch(types.actions.setProviderIds, {
+    newProviderId: providerId,
+    preferredProviderId: providers[0],
+    credential: error.credential
+  });
   Bus.$emit('confirm_account_link');
 };
-export const fetchProviderNameFromId = id => {
+export const fetchProviderNameFromId                      = id => {
   switch (id) {
   case 'google.com':
     return 'Google';
