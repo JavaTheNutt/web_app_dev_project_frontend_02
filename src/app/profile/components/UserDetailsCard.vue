@@ -26,6 +26,8 @@
   import ProfileBus from '../service/ProfileBus';
   import EditUserDialog from './EditUserDetailsDialog';
 
+  import * as profileService from '../service/profileService';
+
   export default {
     components: {EditUserDialog},
     name: 'user-details-card',
@@ -36,6 +38,9 @@
       }),
       photoUrl() {
         return this.userPhotoUrl !== '' ? this.userPhotoUrl : defaultProfilePic;
+      },
+      isFirebasePhoto(){
+        return profileService.isFirebaseProfilePic(this.userPhotoUrl);
       }
     },
     methods:{

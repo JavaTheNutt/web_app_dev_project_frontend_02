@@ -16,6 +16,7 @@
   import {mapGetters} from 'vuex';
   import authTypes from '@/app/auth/vuex/types';
   import * as Logger from 'loglevel';
+  import * as profileService from '../service/profileService';
   import UserDetailsCard from './UserDetailsCard';
   export default {
     components: {UserDetailsCard},

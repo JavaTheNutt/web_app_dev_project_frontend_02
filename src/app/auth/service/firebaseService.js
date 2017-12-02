@@ -3,7 +3,6 @@ import * as Logger from 'loglevel';
 import Bus from '@/app/events/bus';
 import store from '@/store';
 import types from '../vuex/types';
-import * as persistance from './persistence';
 import router from '@/router';
 
 
@@ -23,8 +22,20 @@ export const passwordLogin                                = async (email, passwo
   }
 };
 export const logOut                                       = () => firebase.auth().signOut();
+export const updateProfile                                = details => {
+
+};
 export const updateUserName                               = async displayName => {
   const result = await updateUserProfile({displayName});
+  if (result.error) {
+    Logger.warn(`there was an error updating the users display name. ${JSON.stringify(result.error)}`);
+    return result;
+  }
+  Logger.info('user assumed updated');
+  return true;
+};
+export const updateUserProfilePic                         = async picUrl => {
+  const result = await updateUserProfile({photoURL: picUrl});
   if (result.error) {
     Logger.warn(`there was an error updating the users display name. ${JSON.stringify(result.error)}`);
     return result;
@@ -48,6 +59,13 @@ export const updateUserProfile                            = async details => {
     return {error: e};
   }
 };
+export const getCurrentUserId                             = () => {
+  const user = getCurrentUser();
+  if (user.error) {
+    return user;
+  }
+  return user.oid;
+};
 export const getCurrentUser                               = () => firebase.auth().currentUser || {error: 'there is no user logged in'};
 export const testAuthState                                = user => {
   /*if (!user) {
@@ -68,7 +86,7 @@ export const testAuthState                                = user => {
   router.push(loggedInUser ? '/profile' : '/');
   return loggedInUser;
 };
-export const updateLocalProfile = user => {
+export const updateLocalProfile                           = user => {
   if (!user) {
     Logger.info('no user logged in to firebase, logging out locally');
     store.dispatch(types.actions.resetDisplayName);
