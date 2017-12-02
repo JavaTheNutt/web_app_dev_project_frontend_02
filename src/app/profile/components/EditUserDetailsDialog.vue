@@ -1,9 +1,9 @@
 <template>
-  <v-dialog v-model="isEdit" width="700" height="500">
+  <v-dialog v-model="isEdit" max-width="700" persistent>
     <v-card>
       <v-card-title primary-title><h3 class="headline mb-0 text-xs-center">Enter your new details</h3></v-card-title>
       <v-card-text>
-        <form novalidate>
+        <form novalidate @submit.stop.prevent="submit">
           <v-container fluid grid-list-md text-xs-center>
             <v-layout column>
               <v-flex>
@@ -14,7 +14,7 @@
                 </v-radio-group>
               </v-flex>
               <v-flex v-if="editField === 'countries'">
-                <manage-default-countries></manage-default-countries>
+                <manage-default-countries @countryAdded="countryAdded"></manage-default-countries>
               </v-flex>
               <v-flex v-if="editField === 'name'">
                 <v-text-field
@@ -83,14 +83,15 @@
         editField: 'name',
         profileFile:{
           name: ''
-        }
+        },
+        countriesChanged: false
       };
     },
     computed: {
       formValid() {
         Logger.info(`display name: ${this.displayName}`);
         Logger.info(`res: ${this.displayName > 3}`);
-        return this.hasUsername || this.hasPicUrl || this.hasPicFile;
+        return this.hasUsername || this.hasPicUrl || this.hasPicFile || this.countriesValid;
       },
       hasUsername() {
         return this.editField === 'name' && this.displayName.length > 3;
@@ -106,6 +107,9 @@
       },
       picFileValid(){
         return this.selectFileType === 'file' && this.profileFile && this.profileFile.name && /\.(jpe?g|png|svg|gif|bmp)$/i.test(this.profileFile.name.toLowerCase());
+      },
+      countriesValid(){
+        return this.editField === 'countries' && this.countriesChanged;
       }
     },
     created() {
@@ -113,6 +117,7 @@
       ProfileBus.$on('close_edit', () => this.isEdit = false);
     },
     methods: {
+      submit(){},
       saveDetails() {
         if(this.hasUsername){
           return this.saveName();
@@ -135,6 +140,9 @@
       fileSelected(file) {
         Logger.info(`file ${JSON.stringify(file.name)}`);
         this.profileFile = file;
+      },
+      countryAdded(hasChanged){
+        this.countriesChanged = hasChanged;
       }
     }
   };
