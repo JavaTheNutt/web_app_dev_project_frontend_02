@@ -26,6 +26,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
+    "country-list": "^1.1.0",
     "email-validator": "^1.1.1",
     "firebase": "^4.6.2",
     "font-awesome": "^4.7.0",

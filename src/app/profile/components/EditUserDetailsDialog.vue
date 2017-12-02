@@ -10,7 +10,11 @@
                 <v-radio-group v-model="editField" row>
                   <v-radio label="Name" value="name" color="primary"></v-radio>
                   <v-radio label="Profile Picture" value="profilePicture" color="primary"></v-radio>
+                  <v-radio label="Countries" value="countries" color="primary"></v-radio>
                 </v-radio-group>
+              </v-flex>
+              <v-flex v-if="editField === 'countries'">
+                <manage-default-countries></manage-default-countries>
               </v-flex>
               <v-flex v-if="editField === 'name'">
                 <v-text-field
@@ -63,9 +67,12 @@
   import {updateUserName, updateUserProfilePic} from '@/app/auth/service/firebaseService';
   import FileInput from '../../widgets/fileInput/FileInput';
   import * as profileService from '../service/profileService';
+  import ManageDefaultCountries from './ManageDefaultCountries';
 
   export default {
-    components: {FileInput},
+    components: {
+      ManageDefaultCountries,
+      FileInput},
     name: 'edit-user-dialog',
     data() {
       return {

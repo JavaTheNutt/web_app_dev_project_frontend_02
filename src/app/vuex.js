@@ -1,3 +1,3 @@
 import {vuex as auth} from './auth';
-
-export default {auth};
+import {vuex as profile} from './profile';
+export default {auth, profile};

@@ -2,7 +2,8 @@ import firebase from 'firebase';
 import {getCurrentUser, getCurrentUserId, updateUserProfilePic} from '@/app/auth/service/firebaseService';
 import DefaultProfilePic from '@/assets/defaultProf.png';
 import * as Logger from 'loglevel';
-
+import store from '@/store';
+import profileTypes from '../vuex/types';
 export const fetchFirebaseProfilePicUrl   = async () => {
   const id = getCurrentUserId();
   if (id.error) {
@@ -26,6 +27,18 @@ export const savePhoto                    = file => {
       const downloadURL = await fetchUserPictureFromFirebase(userId, ext);
       await updateUserProfilePic(downloadURL);
     }
+  });
+};
+export const addDefaultCountry            = async country => {
+  const userRef = fetchUserReference();
+  const user    = await userRef.get();
+  user.countries.push(country);
+  const res = await userRef.set({countries: user.countries});
+};
+export const fetchUserReference           = () => firebase.firestore().doc(`users/${getCurrentUserId()}`);
+export const syncDefaultCountries         = () => {
+  fetchUserReference().onSnapshot(doc => {
+    store.commit(profileTypes.mutations.SET_DEFUALT_COUNTRIES, doc.data.countries);
   });
 };
 export const fetchPhotoUrl                = () => {
