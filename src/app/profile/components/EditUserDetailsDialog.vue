@@ -106,13 +106,19 @@
     },
     methods: {
       saveDetails() {
-
+        if(this.hasUsername){
+          return this.saveName();
+        }
+        return this.saveProfilePicture();
       },
       saveName() {
-
+        updateUserName(this.displayName);
       },
       saveProfilePicture() {
-
+        if(this.picUrlValid){
+          return updateUserProfilePic(this.profilePicUrl);
+        }
+        return false;
       },
       fileSelected(file) {
         Logger.info(`file ${JSON.stringify(file.name)}`);
