@@ -23,6 +23,23 @@ export const passwordLogin                                = async (email, passwo
   }
 };
 export const logOut                                       = () => firebase.auth().signOut();
+export const updateUserProfile                            = async details => {
+  Logger.info('attempting to fetch user');
+  const user = getCurrentUser();
+  if (user.error) {
+    Logger.warn(`there was an error fetching the user: ${JSON.stringify(user.error)}`);
+    return user;
+  }
+  try {
+    const result = await user.updateProfile(details);
+    Logger.info('user updated successfully');
+    return true;
+  } catch (e) {
+    Logger.warn(`there was an error updating the user: ${e}`);
+    return {error: e};
+  }
+};
+export const getCurrentUser                               = () => firebase.auth().currentUser || {error: 'there is no user logged in'};
 export const testAuthState                                = user => {
   if (!user) {
     Logger.info('no user logged in to firebase, logging out locally');
@@ -39,7 +56,7 @@ export const testAuthState                                = user => {
   router.push('/profile');
   return true;
 };
-export const fetchProfilePicture = user => {
+export const fetchProfilePicture                          = user => {
   Logger.info(`fetching photo from: ${JSON.stringify(user)}`);
   return user.photoURL || '';
 };
