@@ -23,6 +23,15 @@ export const passwordLogin                                = async (email, passwo
   }
 };
 export const logOut                                       = () => firebase.auth().signOut();
+export const updateUserName                               = async displayName => {
+  const result = await updateUserProfile({displayName});
+  if (result.error) {
+    Logger.warn(`there was an error updating the users display name. ${JSON.stringify(result.error)}`);
+    return result;
+  }
+  Logger.info('user assumed updated');
+  return true;
+};
 export const updateUserProfile                            = async details => {
   Logger.info('attempting to fetch user');
   const user = getCurrentUser();
