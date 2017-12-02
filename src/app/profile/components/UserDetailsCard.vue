@@ -3,7 +3,8 @@
     <v-container fluid>
       <v-layout align-center column>
         <v-flex xs12>
-          <v-card-title primary-title><h3 class="headline mb-0 text-xs-center">{{displayName}}</h3></v-card-title>
+          <v-card-title primary-title><h3 class="headline mb-0 pb-0 text-xs-center">{{displayName}}</h3></v-card-title>
+          <v-card-text subtitle><p class="subheading mt-0 pt-0 text-xs-center"><em>{{email}}</em></p></v-card-text>
         </v-flex>
         <v-flex xs12>
           <v-avatar size="128px"><img :src="photoUrl" alt="profile picture"/></v-avatar>
@@ -34,7 +35,8 @@
     computed: {
       ...mapGetters({
         displayName: authTypes.getters.getDisplayName,
-        userPhotoUrl: authTypes.getters.getPhotoUrl
+        userPhotoUrl: authTypes.getters.getPhotoUrl,
+        email: authTypes.getters.getEmail
       }),
       photoUrl() {
         return this.userPhotoUrl !== '' ? this.userPhotoUrl : defaultProfilePic;

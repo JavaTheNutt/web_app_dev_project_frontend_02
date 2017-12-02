@@ -8,5 +8,6 @@ export default {
   user:{
     displayName: '',
     photoUrl: '',
+    email: ''
   }
 };

@@ -10,5 +10,17 @@ export default {
     state.linkAccounts.credential          = credential;
   },
   [types.mutations.SET_DISPLAY_NAME]: (state, {userDisplayName}) => state.user.displayName = userDisplayName,
-  [types.mutations.SET_PHOTO_URL]:(state, {photoUrl}) => state.user.photoUrl = photoUrl
+  [types.mutations.SET_PHOTO_URL]:(state, {photoUrl}) => state.user.photoUrl = photoUrl,
+  [types.mutations.SET_USER]: (state, {userDetails}) => {
+    state.user = {
+      displayName: userDetails.displayName,
+      photoUrl: userDetails.photoUrl,
+      email: userDetails.email
+    };
+  },
+  [types.mutations.UNSET_USER]: state => state.user = {
+    displayName: '',
+    photoUrl: '',
+    email: ''
+  }
 };

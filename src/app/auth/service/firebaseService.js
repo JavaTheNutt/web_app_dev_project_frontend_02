@@ -89,12 +89,12 @@ export const testAuthState                                = user => {
 export const updateLocalProfile                           = user => {
   if (!user) {
     Logger.info('no user logged in to firebase, logging out locally');
-    store.dispatch(types.actions.resetDisplayName);
-    store.commit(types.mutations.SET_PHOTO_URL, {photoURL: ''});
+    store.commit(types.mutations.UNSET_USER);
     return false;
   }
-  store.dispatch(types.actions.setDisplayName, {displayName: user.displayName});
-  store.commit(types.mutations.SET_PHOTO_URL, {photoUrl: fetchProfilePicture(user)});
+  const details = {displayName: user.displayName, photoUrl: user.photoURL, email:  user.email};
+  Logger.info(`details: ${JSON.stringify(details)}`);
+  store.dispatch(types.actions.setUser, {userDetails: details});
   Logger.info('user logged in to firebase, logging in locally');
   return true;
 };

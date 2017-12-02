@@ -25,5 +25,6 @@ export default {
     credential: {}
   }),
   [types.actions.setDisplayName]:({commit}, {displayName}) => commit(types.mutations.SET_DISPLAY_NAME, {userDisplayName:displayName}),
-  [types.actions.resetDisplayName]:({commit}) => commit(types.mutations.SET_DISPLAY_NAME, {userDisplayName:''})
+  [types.actions.resetDisplayName]:({commit}) => commit(types.mutations.SET_DISPLAY_NAME, {userDisplayName:''}),
+  [types.actions.setUser]: ({commit}, {userDetails}) => commit(types.mutations.SET_USER, {userDetails})
 };

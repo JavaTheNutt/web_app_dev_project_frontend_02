@@ -2,8 +2,6 @@ import firebase from 'firebase';
 import {getCurrentUser, getCurrentUserId, updateUserProfilePic} from '@/app/auth/service/firebaseService';
 import DefaultProfilePic from '@/assets/defaultProf.png';
 import * as Logger from 'loglevel';
-import store from '@/store';
-import authTypes from '@/app/auth/vuex/types';
 
 export const fetchFirebaseProfilePicUrl   = async () => {
   const id = getCurrentUserId();
