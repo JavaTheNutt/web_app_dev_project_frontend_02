@@ -42,7 +42,7 @@ export const updateUserProfile                            = async details => {
   try {
     const result = await user.updateProfile(details);
     Logger.info('user updated successfully');
-    return true;
+    return updateLocalProfile(user);
   } catch (e) {
     Logger.warn(`there was an error updating the user: ${e}`);
     return {error: e};
@@ -50,7 +50,7 @@ export const updateUserProfile                            = async details => {
 };
 export const getCurrentUser                               = () => firebase.auth().currentUser || {error: 'there is no user logged in'};
 export const testAuthState                                = user => {
-  if (!user) {
+  /*if (!user) {
     Logger.info('no user logged in to firebase, logging out locally');
     persistance.clearDisplayName();
     router.push('/');
@@ -63,6 +63,21 @@ export const testAuthState                                = user => {
   store.commit(types.mutations.SET_PHOTO_URL, {photoUrl: fetchProfilePicture(user)});
   Logger.info('user logged in to firebase, logging in locally');
   router.push('/profile');
+  return true;*/
+  const loggedInUser = updateLocalProfile(user);
+  router.push(loggedInUser ? '/profile' : '/');
+  return loggedInUser;
+};
+export const updateLocalProfile = user => {
+  if (!user) {
+    Logger.info('no user logged in to firebase, logging out locally');
+    store.dispatch(types.actions.resetDisplayName);
+    store.commit(types.mutations.SET_PHOTO_URL, {photoURL: ''});
+    return false;
+  }
+  store.dispatch(types.actions.setDisplayName, {displayName: user.displayName});
+  store.commit(types.mutations.SET_PHOTO_URL, {photoUrl: fetchProfilePicture(user)});
+  Logger.info('user logged in to firebase, logging in locally');
   return true;
 };
 export const fetchProfilePicture                          = user => {

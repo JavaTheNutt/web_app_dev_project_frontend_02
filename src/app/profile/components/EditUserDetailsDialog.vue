@@ -21,13 +21,15 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn flat color="primary" @click.stop="isEdit = false">Dismiss</v-btn>
-        <v-btn color="primary">Save</v-btn>
+        <v-btn color="primary" :disabled="!formValid" @click.stop="saveDetails">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 <script>
   import ProfileBus from '../service/ProfileBus';
+  import * as Logger from 'loglevel';
+  import {updateUserName} from '@/app/auth/service/firebaseService';
 
   export default {
     name: 'edit-user-dialog',
@@ -37,9 +39,21 @@
         displayName: ''
       };
     },
+    computed: {
+      formValid() {
+        Logger.info(`display name: ${this.displayName}`);
+        Logger.info(`res: ${this.displayName > 3}`);
+        return this.displayName.length > 3;
+      }
+    },
     created() {
       ProfileBus.$on('edit_profile', () => this.isEdit = true);
       ProfileBus.$on('close_edit', () => this.isEdit = false);
+    },
+    methods: {
+      saveDetails() {
+        updateUserName(this.displayName);
+      }
     }
   };
 </script>
