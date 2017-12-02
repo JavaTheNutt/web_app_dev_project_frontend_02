@@ -39,7 +39,10 @@ export const testAuthState                                = user => {
   router.push('/profile');
   return true;
 };
-export const fetchProfilePicture = user => user.photoUrl || '@/assets/defaultProf.png';
+export const fetchProfilePicture = user => {
+  Logger.info(`fetching photo from: ${JSON.stringify(user)}`);
+  return user.photoURL || '';
+};
 export const signUpWithEmailPassword                      = async (email, password) => {
   try {
     await firebase.auth().createUserWithEmailAndPassword(email, password);

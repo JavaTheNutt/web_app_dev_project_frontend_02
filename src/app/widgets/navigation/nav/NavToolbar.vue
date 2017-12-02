@@ -14,7 +14,7 @@
         </v-list-tile>
       </v-list>
     </v-menu>
-    <v-avatar></v-avatar>
+    <v-avatar v-if="loggedIn"><img :src="photoUrl" alt="profile picture"/> </v-avatar>
   </v-toolbar>
 </template>
 <script>
@@ -24,10 +24,14 @@
   import {mapGetters} from 'vuex';
   import authTypes from '@/app/auth/vuex/types';
   import {logOut} from '@/app/auth/service/firebaseService';
+  import defaultProfilePic from '@/assets/defaultProf.png';
   export default {
     name: 'nav-toolbar',
     computed:{
-      ...mapGetters({loggedIn: authTypes.getters.getLoggedIn})
+      ...mapGetters({loggedIn: authTypes.getters.getLoggedIn, userPhotoUrl: authTypes.getters.getPhotoUrl}),
+      photoUrl(){
+        return this.userPhotoUrl !== ''? this.userPhotoUrl : defaultProfilePic;
+      }
     },
     methods: {
       emitClick() {
