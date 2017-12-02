@@ -64,7 +64,7 @@ export const getCurrentUserId                             = () => {
   if (user.error) {
     return user;
   }
-  return user.oid;
+  return user.uid;
 };
 export const getCurrentUser                               = () => firebase.auth().currentUser || {error: 'there is no user logged in'};
 export const testAuthState                                = user => {

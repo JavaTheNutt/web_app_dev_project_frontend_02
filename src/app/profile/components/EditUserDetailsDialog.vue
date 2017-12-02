@@ -62,6 +62,7 @@
   import * as Logger from 'loglevel';
   import {updateUserName, updateUserProfilePic} from '@/app/auth/service/firebaseService';
   import FileInput from '../../widgets/fileInput/FileInput';
+  import * as profileService from '../service/profileService';
 
   export default {
     components: {FileInput},
@@ -113,12 +114,16 @@
       },
       saveName() {
         updateUserName(this.displayName);
+        this.isEdit = false;
       },
       saveProfilePicture() {
         if(this.picUrlValid){
-          return updateUserProfilePic(this.profilePicUrl);
+          updateUserProfilePic(this.profilePicUrl);
         }
-        return false;
+        if(this.picFileValid){
+          profileService.savePhoto(this.profileFile);
+        }
+        this.isEdit = false;
       },
       fileSelected(file) {
         Logger.info(`file ${JSON.stringify(file.name)}`);

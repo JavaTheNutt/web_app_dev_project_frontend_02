@@ -1,25 +1,44 @@
 import firebase from 'firebase';
-import {getCurrentUserId, getCurrentUser} from '@/app/auth/service/firebaseService';
+import {getCurrentUser, getCurrentUserId, updateUserProfilePic} from '@/app/auth/service/firebaseService';
 import DefaultProfilePic from '@/assets/defaultProf.png';
-export const fetchFirebaseProfilePicUrl = async () => {
+import * as Logger from 'loglevel';
+import store from '@/store';
+import authTypes from '@/app/auth/vuex/types';
+
+export const fetchFirebaseProfilePicUrl   = async () => {
   const id = getCurrentUserId();
-  if(id.error){
+  if (id.error) {
     return id;
   }
-  return await firebase.storage().ref('user').child(`${id}/ProfilePic.jpg`).getDownloadURL();
+  return await firebase.storage().ref('user').child(`${id}/profilePicture.jpg`).getDownloadURL();
 };
-
-export const isFirebaseProfilePic = photoUrl => photoUrl.substring(0, 5) === 'gs://';
-
-export const fetchPhotoUrl = () => {
+export const fetchUserPictureFromFirebase = async (id, ext) => await fetchPhotoRef(id).child(`profilePicture${ext}`).
+getDownloadURL();
+export const isFirebaseProfilePic         = photoUrl => photoUrl.substring(0, 5) === 'gs://';
+export const fetchPhotoRef                = id => firebase.storage().ref('user').child(`${id}/`);
+export const savePhoto                    = file => {
+  const ext = file.name.substring(file.name.lastIndexOf('.'));
+  Logger.info(`file extension: ${ext}`);
+  const userId = getCurrentUserId();
+  Logger.info(`current user id: ${userId}`);
+  const uploadTask = fetchPhotoRef(getCurrentUserId()).child(`profilePicture${ext}`).put(file);
+  uploadTask.on('state_changed', async snapshot => {
+    if (snapshot.bytesTransferred === snapshot.totalBytes) {
+      Logger.info('upload completed');
+      const downloadURL = await fetchUserPictureFromFirebase(userId, ext);
+      await updateUserProfilePic(downloadURL);
+    }
+  });
+};
+export const fetchPhotoUrl                = () => {
   const user = getCurrentUser();
-  if(user.error){
-    return  user;
+  if (user.error) {
+    return user;
   }
-  if(!user.photoURL){
+  if (!user.photoURL) {
     return DefaultProfilePic;
   }
-  if(isFirebaseProfilePic()){
+  if (isFirebaseProfilePic()) {
     return fetchFirebaseProfilePicUrl();
   }
   return null;
