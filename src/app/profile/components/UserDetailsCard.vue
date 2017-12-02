@@ -11,19 +11,23 @@
       </v-layout>
       <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn fab color="primary" dark>
+          <v-btn fab color="primary" dark @click.stop="editProfile">
             <v-icon>edit</v-icon>
           </v-btn>
       </v-card-actions>
     </v-container>
+    <edit-user-dialog></edit-user-dialog>
   </v-card>
 </template>
 <script>
   import {mapGetters} from 'vuex';
   import authTypes from '@/app/auth/vuex/types';
   import defaultProfilePic from '@/assets/defaultProf.png';
+  import ProfileBus from '../service/ProfileBus';
+  import EditUserDialog from './EditUserDetailsDialog';
 
   export default {
+    components: {EditUserDialog},
     name: 'user-details-card',
     computed: {
       ...mapGetters({
@@ -32,6 +36,11 @@
       }),
       photoUrl() {
         return this.userPhotoUrl !== '' ? this.userPhotoUrl : defaultProfilePic;
+      }
+    },
+    methods:{
+      editProfile(){
+        ProfileBus.$emit('edit_profile');
       }
     }
   };
