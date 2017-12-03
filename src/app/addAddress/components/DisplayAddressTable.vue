@@ -3,6 +3,9 @@
     v-model="selectedAddress"
     :headers="headers"
     :items="addresses"
+    :pagination.sync="pagination"
+    :hide-actions="!showPagination"
+    :hide-headers="true"
     item-key="text"
     class="elevation-1">
     <template slot="headers" slot-scope="props">
@@ -10,8 +13,8 @@
         <th>{{props.header}}</th>
       </tr>
     </template>
-    <template slot="addresses" slot-scope="props">
-      <tr :active="props.selected" @click="props.selected = !props.selected">
+    <template slot="items" slot-scope="props">
+      <tr>
         <td>{{props.item.text}}</td>
       </tr>
     </template>
@@ -22,10 +25,18 @@
     name: 'select-address-table',
     data(){
       return{
-        selected:[],
+        selectedAddress:[],
         props:{addresses:Array},
-        headers:[{header:'Address'}]
+        headers:[{header:'Address'}],
+        pagination:{
+          rowsPerPage: 10
+        }
       };
+    },
+    computed:{
+      showPagination(){
+        return this.addresses.length >= 10;
+      }
     }
   };
 </script>

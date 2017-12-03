@@ -20,6 +20,9 @@
               v-model="selectedAddress"
               :headers="headers"
               :items="addresses"
+              :pagination.sync="pagination"
+              :hide-actions="!showPagination"
+              :hide-header="true"
               item-key="text"
               class="elevation-1">
               <template slot="headers" slot-scope="props">
@@ -33,6 +36,8 @@
                 </tr>
               </template>
             </v-data-table>
+            <!--<select-address-table
+              :addresses="addresses"></select-address-table>-->
           </v-flex>
         </v-layout>
         <v-layout row v-if="!loading">
@@ -54,12 +59,15 @@
   import profileTypes from '@/app/profile/vuex/types';
   import {addDefaultCountry} from '@/app/profile/service/profileService';
   import {fetchGeocodedAddress, fetchFormatted} from '../service/geocoding';
-  import * as Logger from 'loglevel';/*
-  import SelectAddressTable from './DisplayAddressTable';*/
+  import * as Logger from 'loglevel';
+  import SelectAddressTable from './DisplayAddressTable';
+  /*
+	import SelectAddressTable from './DisplayAddressTable';*/
 
   export default {
     components: {
       //SelectAddressTable,
+      SelectAddressTable,
       AddAddressForm
     },
     name: 'add_address_dialog',
@@ -74,7 +82,10 @@
         saveCountry: false,
         loading: false,
         headers:[{header:'Address', value: 'address'}],
-        selectedAddress:[]
+        selectedAddress:[],
+        pagination:{
+          rowsPerPage: 10
+        }
       };
     },
     computed: {
@@ -82,7 +93,9 @@
       hasPossibleAddresses() {
         return this.addresses.length > 0;
       },
-
+      showPagination(){
+        return this.addresses.length >= 10;
+      }
     },
     created() {
       Bus.$on('show_add_address', () => this.isEdit = true);
