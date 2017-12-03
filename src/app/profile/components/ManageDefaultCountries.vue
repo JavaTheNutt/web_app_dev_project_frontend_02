@@ -51,7 +51,7 @@
     methods:{
       addCountry(country){
         this.newCountries.push(country);
-        this.$emit('countryAdded', this.countriesChanged);
+        this.$emit('countryAdded', this.countriesChanged, this.mergedCountries);
       }
     },
     mounted(){

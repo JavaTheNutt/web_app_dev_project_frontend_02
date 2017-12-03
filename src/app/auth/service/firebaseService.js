@@ -4,7 +4,7 @@ import Bus from '@/app/events/bus';
 import store from '@/store';
 import types from '../vuex/types';
 import router from '@/router';
-
+import {syncDefaultCountries} from '@/app/profile/service/profileService';
 
 const googleProvider   = new firebase.auth.GoogleAuthProvider();
 const facebookProvider = new firebase.auth.FacebookAuthProvider();
@@ -68,20 +68,6 @@ export const getCurrentUserId                             = () => {
 };
 export const getCurrentUser                               = () => firebase.auth().currentUser || {error: 'there is no user logged in'};
 export const testAuthState                                = user => {
-  /*if (!user) {
-    Logger.info('no user logged in to firebase, logging out locally');
-    persistance.clearDisplayName();
-    router.push('/');
-    store.dispatch(types.actions.resetDisplayName);
-    store.commit(types.mutations.SET_PHOTO_URL, {photoURL: ''});
-    return false;
-  }
-  persistance.setDisplayName(user.displayName);
-  store.dispatch(types.actions.setDisplayName, {displayName: user.displayName});
-  store.commit(types.mutations.SET_PHOTO_URL, {photoUrl: fetchProfilePicture(user)});
-  Logger.info('user logged in to firebase, logging in locally');
-  router.push('/profile');
-  return true;*/
   const loggedInUser = updateLocalProfile(user);
   router.push(loggedInUser ? '/profile' : '/');
   return loggedInUser;
@@ -95,6 +81,7 @@ export const updateLocalProfile                           = user => {
   const details = {displayName: user.displayName, photoUrl: user.photoURL, email:  user.email};
   Logger.info(`details: ${JSON.stringify(details)}`);
   store.dispatch(types.actions.setUser, {userDetails: details});
+  syncDefaultCountries();
   Logger.info('user logged in to firebase, logging in locally');
   return true;
 };

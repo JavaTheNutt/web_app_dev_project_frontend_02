@@ -1,9 +1,11 @@
 import firebase from 'firebase';
+import 'firebase/firestore';
 import {getCurrentUser, getCurrentUserId, updateUserProfilePic} from '@/app/auth/service/firebaseService';
 import DefaultProfilePic from '@/assets/defaultProf.png';
 import * as Logger from 'loglevel';
 import store from '@/store';
 import profileTypes from '../vuex/types';
+//const db = firebase.firestore();
 export const fetchFirebaseProfilePicUrl   = async () => {
   const id = getCurrentUserId();
   if (id.error) {
@@ -15,7 +17,7 @@ export const fetchUserPictureFromFirebase = async (id, ext) => await fetchPhotoR
 getDownloadURL();
 export const isFirebaseProfilePic         = photoUrl => photoUrl.substring(0, 5) === 'gs://';
 export const fetchPhotoRef                = id => firebase.storage().ref('user').child(`${id}/`);
-export const savePhoto                    = file => {
+export const savePhoto            = file => {
   const ext = file.name.substring(file.name.lastIndexOf('.'));
   Logger.info(`file extension: ${ext}`);
   const userId = getCurrentUserId();
@@ -29,16 +31,22 @@ export const savePhoto                    = file => {
     }
   });
 };
-export const addDefaultCountry            = async country => {
+export const addDefaultCountries  = async countries => {
   const userRef = fetchUserReference();
   const user    = await userRef.get();
-  user.countries.push(country);
+  if(!user.exists){
+    const tmpUser = {countries};
+    await userRef.set(tmpUser);
+    return;
+  }
+  user.countries.concat(countries);
   const res = await userRef.set({countries: user.countries});
 };
-export const fetchUserReference           = () => firebase.firestore().doc(`users/${getCurrentUserId()}`);
-export const syncDefaultCountries         = () => {
+export const fetchUserReference   = () => firebase.firestore().collection('users').doc(`${getCurrentUserId()}`);
+export const syncDefaultCountries = () => {
   fetchUserReference().onSnapshot(doc => {
-    store.commit(profileTypes.mutations.SET_DEFUALT_COUNTRIES, doc.data.countries);
+    Logger.info(`doc: ${JSON.stringify(doc.exists)}`);
+    store.commit(profileTypes.mutations.SET_DEFAULT_COUNTRIES, {defaultCountries: doc.data().countries || []});
   });
 };
 export const fetchPhotoUrl                = () => {

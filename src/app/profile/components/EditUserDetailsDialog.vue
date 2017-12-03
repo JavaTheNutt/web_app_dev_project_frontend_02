@@ -84,7 +84,8 @@
         profileFile:{
           name: ''
         },
-        countriesChanged: false
+        countriesChanged: false,
+        newCountries: []
       };
     },
     computed: {
@@ -121,8 +122,13 @@
       saveDetails() {
         if(this.hasUsername){
           return this.saveName();
+        }else if(this.hasPicUrl){
+          return this.saveProfilePicture();
         }
-        return this.saveProfilePicture();
+        return this.saveCountries();
+      },
+      saveCountries(){
+        profileService.addDefaultCountries(this.newCountries);
       },
       saveName() {
         updateUserName(this.displayName);
@@ -141,8 +147,9 @@
         Logger.info(`file ${JSON.stringify(file.name)}`);
         this.profileFile = file;
       },
-      countryAdded(hasChanged){
+      countryAdded(hasChanged, newCountries){
         this.countriesChanged = hasChanged;
+        this.newCountries = newCountries;
       }
     }
   };
