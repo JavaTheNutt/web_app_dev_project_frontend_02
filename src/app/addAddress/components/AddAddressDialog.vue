@@ -16,7 +16,7 @@
         <v-layout row>
           <v-spacer></v-spacer>
           <v-btn flat color="primary" @click.stop="closeDialog">Dismiss</v-btn>
-          <v-btn color="primary" :disabled="!formValid">Submit</v-btn>
+          <v-btn color="primary" :disabled="!formValid" @click.stop="submitAddress">Submit</v-btn>
         </v-layout>
       </v-container>
     </v-card>
@@ -27,6 +27,8 @@
   import Bus from '@/app/events/bus';
   import {mapGetters} from 'vuex';
   import profileTypes from '@/app/profile/vuex/types';
+  import {fetchGeocodedAddress} from '../service/geocoding';
+
   export default {
     components: {AddAddressForm},
     name: 'add_address_dialog',
@@ -55,6 +57,9 @@
       closeDialog(){
         Object.assign(this.$data, this.$options.data.call(this));
         this.isEdit = false;
+      },
+      submitAddress(){
+        fetchGeocodedAddress(this.addressDetails);
       }
     }
   };

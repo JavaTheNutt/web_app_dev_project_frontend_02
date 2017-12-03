@@ -6,7 +6,7 @@
           <v-text-field
             name="address01Field"
             label="Address Line One"
-            v-model="addressDetails.line01"
+            v-model="addressDetails.address01"
             required
             data-vv-name="address01"
             v-validate="'required|min:5'"
@@ -19,7 +19,7 @@
           <v-text-field
             name="address02Field"
             label="Address Line Two"
-            v-model="addressDetails.line02"
+            v-model="addressDetails.address02"
             type="text"
             @input="emitFormData"
           ></v-text-field>
@@ -28,7 +28,7 @@
           <v-text-field
             name="address03Field"
             label="Address Line Three"
-            v-model="addressDetails.line03"
+            v-model="addressDetails.address03"
             type="text"
             @input="emitFormData"
           ></v-text-field>
@@ -67,9 +67,9 @@
     data() {
       return {
         addressDetails: {
-          line01: '',
-          line02: '',
-          line03: '',
+          address01: '',
+          address02: '',
+          address03: '',
           country: '',
         },
         fullCountries: countryList().getNames(),
