@@ -10,7 +10,7 @@
         </v-layout>
         <v-layout row>
           <v-flex xs12>
-            <add-address-form :formInView="isEdit"></add-address-form>
+            <add-address-form :formInView="isEdit" :defaultCountries="defaultCountries"></add-address-form>
           </v-flex>
         </v-layout>
         <v-layout row>
@@ -24,7 +24,8 @@
 <script>
   import AddAddressForm from './AddAddressForm';
   import Bus from '@/app/events/bus';
-
+  import {mapGetters} from 'vuex';
+  import profileTypes from '@/app/profile/vuex/types';
   export default {
     components: {AddAddressForm},
     name: 'add_address_dialog',
@@ -33,9 +34,17 @@
         isEdit: false
       };
     },
+    computed:{
+      ...mapGetters({defaultCountries: profileTypes.getters.getDefaultCountries}),
+    },
     created() {
       Bus.$on('show_add_address', () => this.isEdit = true);
       Bus.$on('hide_add_address', () => this.isEdit = false);
+    },
+    watch:{
+      isEdit(){
+        if(!this.isEdit) this.$emit('close');
+      }
     }
   };
 </script>

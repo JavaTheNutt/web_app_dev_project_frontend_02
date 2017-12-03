@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="elevation-16">
     <v-container fluid>
       <v-layout align-center column class="pb-0 mb-0 pt-0 pb-0">
         <v-flex xs12 class="pb-0 mb-0 pt-0 pb-0">

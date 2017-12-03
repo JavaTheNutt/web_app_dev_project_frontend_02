@@ -38,9 +38,6 @@
                         :disabled="!saveAsDefaultEnabled"></v-checkbox>
           </v-layout>
         </v-flex>
-        <!--<v-flex v-if="hasSingleDefault && !showCountrySelect">
-          Default Country: {{defaultCountries[0]}}
-        </v-flex>-->
         <v-flex v-if="showCountrySelect">
           <country-select
             :countries="countriesToShow"
@@ -77,9 +74,8 @@
         saveAsDefault: false
       };
     },
-    props:{formInView: Boolean},
+    props:{formInView: Boolean, defaultCountries: Array},
     computed: {
-      ...mapGetters({defaultCountries: profileTypes.getters.getDefaultCountries}),
       hasSingleDefault() {
         return this.defaultCountries.length === 1;
       },
@@ -101,13 +97,15 @@
     },
     mounted(){
       this.saveAsDefault = this.hasNoDefault;
-      this.addressDetails.country = this.hasSingleDefault ? this.defaultCountries[0]: '';
+      this.$nextTick(function () {
+        this.addressDetails.country = this.defaultCountries.length === 1 ? this.defaultCountries[0]: '';
+      });
     },
     watch: {
       newCountrySelected(newVal) {
         this.saveAsDefault = newVal;
         if(!newVal){
-          this.addressDetails.country = this.hasSingleDefault ? this.defaultCountries[0]: this.addressDetails.country;
+          this.addressDetails.country = this.defaultCountries.length === 1 ? this.defaultCountries[0]: this.addressDetails.country;
         }
       },
       formInView(newVal){

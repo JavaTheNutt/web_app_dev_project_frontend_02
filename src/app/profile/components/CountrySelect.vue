@@ -6,15 +6,17 @@
         v-model="selectedCountry"
         label="Please select a country"
         autocomplete
+        @input="inputTriggered"
       ></v-select>
-      <v-btn :disabled="!validCountry" color="primary" flat @click.stop="addCountry"><v-icon>done</v-icon></v-btn>
+      <v-btn v-if="hasButton" :disabled="!validCountry" color="primary" flat @click.stop="addCountry"><v-icon>done</v-icon></v-btn>
     </v-layout>
   </v-container>
 </template>
 <script>
+  import * as Logger from 'loglevel';
   export default {
     name: 'country-select',
-    props: {countries: Array},
+    props: {countries: Array, hasButton: Boolean},
     data() {
       return {
         selectedCountry: ''
@@ -28,6 +30,10 @@
     methods:{
       addCountry(){
         this.$emit('countryAdded', this.selectedCountry);
+      },
+      inputTriggered(){
+        Logger.info(`input triggered, selected country: ${this.selectedCountry}`);
+        if(!this.hasButton) this.addCountry();
       }
     }
   };

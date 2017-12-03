@@ -4,6 +4,7 @@
       <v-flex>
         <country-select
           :countries="filteredCountries"
+          :has-button="true"
           @countryAdded="addCountry"
         ></country-select>
       </v-flex>
