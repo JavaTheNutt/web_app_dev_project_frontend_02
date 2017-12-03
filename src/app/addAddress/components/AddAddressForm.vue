@@ -30,21 +30,58 @@
             type="text"
           ></v-text-field>
         </v-flex>
+        <v-flex v-if="hasSingleDefault">
+          Default Country: {{defaultCountries[0]}}
+        </v-flex>
+        <v-flex v-else-if="hasNoDefault">
+          <country-select
+            :countries="fullCountries"
+            @countryAdded="countrySelected"
+          ></country-select>
+        </v-flex>
+        <v-flex v-else>
+          <country-select
+            :countries="defaultCountries"
+            @countryAdded="countrySelected"></country-select>
+        </v-flex>
       </v-layout>
     </v-container>
   </form>
 </template>
 <script>
+
+  import countryList from 'country-list';
+  import {mapGetters} from 'vuex';
+  import profileTypes from '@/app/profile/vuex/types';
+  import CountrySelect from '../../profile/components/CountrySelect';
+
   export default {
+    components: {CountrySelect},
     name: 'add-address-form',
-    data(){
+    data() {
       return {
         addressDetails: {
           line01: '',
           line02: '',
           line03: '',
+          country: '',
+          fullCountries: countryList().getNames()
         }
       };
+    },
+    computed: {
+      ...mapGetters({defaultCountries: profileTypes.getters.getDefaultCountries}),
+      hasSingleDefault() {
+        return this.defaultCountries.length === 1;
+      },
+      hasNoDefault() {
+        return this.defaultCountries.length === 0;
+      }
+    },
+    methods: {
+      countrySelected(country) {
+        this.country = country;
+      }
     }
   };
 </script>
