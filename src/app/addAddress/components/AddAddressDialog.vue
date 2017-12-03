@@ -10,12 +10,13 @@
         </v-layout>
         <v-layout row>
           <v-flex xs12>
-            <add-address-form :formInView="isEdit" :defaultCountries="defaultCountries"></add-address-form>
+            <add-address-form :formInView="isEdit" :defaultCountries="defaultCountries" @data-changed="dataChanged" @data-invalidated="dataInvalidated"></add-address-form>
           </v-flex>
         </v-layout>
         <v-layout row>
           <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click.stop="isEdit = false">Dismiss</v-btn>
+          <v-btn flat color="primary" @click.stop="closeDialog">Dismiss</v-btn>
+          <v-btn color="primary" :disabled="!formValid">Submit</v-btn>
         </v-layout>
       </v-container>
     </v-card>
@@ -31,7 +32,9 @@
     name: 'add_address_dialog',
     data() {
       return {
-        isEdit: false
+        isEdit: false,
+        addressDetails:{},
+        formValid: false
       };
     },
     computed:{
@@ -41,10 +44,18 @@
       Bus.$on('show_add_address', () => this.isEdit = true);
       Bus.$on('hide_add_address', () => this.isEdit = false);
     },
-    watch:{
-      /*isEdit(){
-        if(!this.isEdit) this.$emit('close');
-      }*/
+    methods:{
+      dataChanged(data){
+        this.formValid = true;
+        this.addressDetails = data;
+      },
+      dataInvalidated(){
+        this.formValid = false;
+      },
+      closeDialog(){
+        Object.assign(this.$data, this.$options.data.call(this));
+        this.isEdit = false;
+      }
     }
   };
 </script>

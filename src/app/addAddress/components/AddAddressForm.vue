@@ -12,6 +12,7 @@
             v-validate="'required|min:5'"
             :error-messages="errors.collect('address01')"
             type="text"
+            @blur="emitFormData"
           ></v-text-field>
         </v-flex>
         <v-flex>
@@ -20,6 +21,7 @@
             label="Address Line Two"
             v-model="addressDetails.line02"
             type="text"
+            @blur="emitFormData"
           ></v-text-field>
         </v-flex>
         <v-flex>
@@ -28,6 +30,7 @@
             label="Address Line Three"
             v-model="addressDetails.line03"
             type="text"
+            @blur="emitFormData"
           ></v-text-field>
         </v-flex>
         <v-flex>
@@ -74,7 +77,10 @@
         saveAsDefault: false
       };
     },
-    props:{formInView: Boolean, defaultCountries: Array},
+    props: {
+      formInView: Boolean,
+      defaultCountries: Array
+    },
     computed: {
       hasSingleDefault() {
         return this.defaultCountries.length === 1;
@@ -93,32 +99,41 @@
       },
       saveAsDefaultEnabled() {
         return this.hasNoDefault || (!this.hasNoDefault && this.newCountrySelected);
+      },
+      address01HasNoErrors() {
+        return this.errors.collect('address01').length === 0 && this.fields.address01.dirty;
+      },
+      formValid() {
+        return this.address01HasNoErrors && this.addressDetails.country !== '';
       }
     },
-    mounted(){
+    mounted() {
       this.saveAsDefault = this.hasNoDefault;
       this.$nextTick(function () {
-        this.addressDetails.country = this.defaultCountries.length === 1 ? this.defaultCountries[0]: '';
+        this.addressDetails.country = this.defaultCountries.length === 1 ? this.defaultCountries[0] : '';
       });
     },
     watch: {
       newCountrySelected(newVal) {
         this.saveAsDefault = newVal;
-        if(!newVal){
-          this.addressDetails.country = this.defaultCountries.length === 1 ? this.defaultCountries[0]: this.addressDetails.country;
+        if (!newVal) {
+          this.addressDetails.country = this.defaultCountries.length === 1 ? this.defaultCountries[0] :
+            this.addressDetails.country;
         }
       },
-      formInView(newVal){
-        if(!newVal) return this.resetValues();
-        return this.addressDetails.country = this.defaultCountries.length > 0 ? this.defaultCountries[0]: '';
-
+      formInView(newVal) {
+        if (!newVal) {
+          return this.resetValues();
+        }
+        return this.addressDetails.country = this.defaultCountries.length > 0 ? this.defaultCountries[0] : '';
       }
     },
     methods: {
       countrySelected(country) {
         this.addressDetails.country = country;
+        this.emitFormData();
       },
-      resetValues(){
+      resetValues() {
         //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
         Object.assign(this.$data, this.$options.data.call(this));
         //found at: https://github.com/baianat/vee-validate/issues/285
@@ -126,11 +141,19 @@
           const self = this;
           Object.keys(this.fields).some(key => {
             self.$validator.flag(key, {
-              untouched: true
+              untouched: true,
+              dirty: false
             });
           });
           this.errors.clear();
         });
+      },
+      emitFormData() {
+        if (this.formValid) {
+          Logger.info('form is valid, emiting data');
+          return this.$emit('data-changed', this.addressDetails);
+        }
+        return this.$emit('data-invalidated');
       }
     }
   };
