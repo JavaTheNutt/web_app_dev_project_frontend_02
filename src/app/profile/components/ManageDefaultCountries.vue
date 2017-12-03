@@ -9,7 +9,9 @@
       </v-flex>
     </v-layout>
     <v-layout row>
-      <v-chip v-for="country in mergedCountries" :key="country">{{country}}</v-chip>
+      <v-chip v-for="country in currentCountries" :key="country" close @input="removeCountry(country)">
+        {{country}}
+      </v-chip>
     </v-layout>
   </v-container>
 </template>
@@ -18,44 +20,54 @@
   import {mapGetters} from 'vuex';
   import types from '../vuex/types';
   import CountrySelect from './CountrySelect';
-  export default{
+
+  export default {
     name: 'manage-default-countries',
-    components:{CountrySelect},
-    data(){
-      return{
+    components: {CountrySelect},
+    data() {
+      return {
         countries: countryList().getNames(),
         newCountries: [],
-        initialCountries: []
+        initialCountries: [],
+        countriesToBeRemoved: [],
+        currentCountries:[]
       };
     },
-    computed:{
+    computed: {
       ...mapGetters({defaultCountries: types.getters.getDefaultCountries}),
-      filteredCountries(){
-        return this.countries.filter(country => this.mergedCountries.indexOf(country) === -1);
+      filteredCountries() {
+        return this.countries.filter(country => this.currentCountries.indexOf(country) === -1);
       },
-      mergedCountries(){
-        return this.defaultCountries.concat(this.newCountries);
-      },
-      countriesChanged(){
-        const sortedDefault = Object.assign([], this.newCountries).sort((a, b) =>  a >= b ? -1 : 1);
-        const sortedInitial = this.initialCountries.sort((a, b) =>  a >= b ? -1 : 1);
-        if(sortedDefault.length !== sortedInitial.length){
+      countriesChanged() {
+        const sortedDefault = Object.assign([], this.currentCountries).sort((a, b) => a >= b ? -1 : 1);
+        const sortedInitial = this.initialCountries.sort((a, b) => a >= b ? -1 : 1);
+        if (sortedDefault.length !== sortedInitial.length) {
           return true;
         }
-        for(let i = 0; i < sortedInitial.length; i++){
-          if(sortedDefault[i] !== sortedInitial[i]) return true;
+        for (let i = 0; i < sortedInitial.length; i++) {
+          if (sortedDefault[i] !== sortedInitial[i]) {
+            return true;
+          }
         }
         return false;
       }
     },
-    methods:{
-      addCountry(country){
-        this.newCountries.push(country);
-        this.$emit('countryAdded', this.countriesChanged, this.mergedCountries);
+    methods: {
+      addCountry(country) {
+        this.currentCountries.push(country);
+        this.triggerChange();
+      },
+      triggerChange(){
+        this.$emit('countryAdded', this.countriesChanged, this.currentCountries);
+      },
+      removeCountry(country){
+        this.currentCountries = this.currentCountries.filter(countryToBeRemoved => countryToBeRemoved !== country);
+        this.triggerChange();
       }
     },
-    mounted(){
+    mounted() {
       this.initialCountries = Object.assign([], this.defaultCountries);
+      this.currentCountries = Object.assign([], this.defaultCountries);
     }
   };
 </script>

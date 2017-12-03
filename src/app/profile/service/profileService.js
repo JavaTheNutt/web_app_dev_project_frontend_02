@@ -39,8 +39,9 @@ export const addDefaultCountries  = async countries => {
     await userRef.set(tmpUser);
     return;
   }
-  user.countries.concat(countries);
-  const res = await userRef.set({countries: user.countries});
+  //Logger.info(`user: ${JSON.stringify(user)}`);
+  user.data().countries.concat(countries);
+  const res = await userRef.set({countries});
 };
 export const fetchUserReference   = () => firebase.firestore().collection('users').doc(`${getCurrentUserId()}`);
 export const syncDefaultCountries = () => {

@@ -55,8 +55,13 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn flat color="primary" @click.stop="isEdit = false">Dismiss</v-btn>
-        <v-btn color="primary" :disabled="!formValid" @click.stop="saveDetails">Save</v-btn>
+        <div v-if="!loading">
+          <v-btn flat color="primary" @click.stop="isEdit = false">Dismiss</v-btn>
+          <v-btn color="primary" :disabled="!formValid" @click.stop="saveDetails">Save</v-btn>
+        </div>
+        <div v-else>
+          <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        </div>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -72,7 +77,8 @@
   export default {
     components: {
       ManageDefaultCountries,
-      FileInput},
+      FileInput
+    },
     name: 'edit-user-dialog',
     data() {
       return {
@@ -81,11 +87,12 @@
         profilePicUrl: '',
         selectFileType: 'url',
         editField: 'name',
-        profileFile:{
+        profileFile: {
           name: ''
         },
         countriesChanged: false,
-        newCountries: []
+        newCountries: [],
+        loading: false
       };
     },
     computed: {
@@ -98,18 +105,18 @@
         return this.editField === 'name' && this.displayName.length > 3;
       },
       hasPicUrl() {
-        return this.editField === 'profilePicture'  && this.picUrlValid;
+        return this.editField === 'profilePicture' && this.picUrlValid;
       },
       hasPicFile() {
-        return this.editField === 'profilePicture'  && this.picFileValid;
+        return this.editField === 'profilePicture' && this.picFileValid;
       },
-      picUrlValid(){
+      picUrlValid() {
         return this.selectFileType === 'url' && /(https?:\/\/.*\.(?:png|jpe?g|svg|gif|bmp))/i.test(this.profilePicUrl);
       },
-      picFileValid(){
+      picFileValid() {
         return this.selectFileType === 'file' && this.profileFile && this.profileFile.name && /\.(jpe?g|png|svg|gif|bmp)$/i.test(this.profileFile.name.toLowerCase());
       },
-      countriesValid(){
+      countriesValid() {
         return this.editField === 'countries' && this.countriesChanged;
       }
     },
@@ -118,38 +125,44 @@
       ProfileBus.$on('close_edit', () => this.isEdit = false);
     },
     methods: {
-      submit(){},
+      submit() {
+      },
       saveDetails() {
-        if(this.hasUsername){
+        this.loading = true;
+        if (this.hasUsername) {
           return this.saveName();
-        }else if(this.hasPicUrl){
+        } else if (this.hasPicUrl) {
           return this.saveProfilePicture();
         }
         return this.saveCountries();
       },
-      saveCountries(){
-        profileService.addDefaultCountries(this.newCountries);
-      },
-      saveName() {
-        updateUserName(this.displayName);
+      async saveCountries() {
+        await profileService.addDefaultCountries(this.newCountries);
+        this.loading = false;
         this.isEdit = false;
       },
-      saveProfilePicture() {
-        if(this.picUrlValid){
-          updateUserProfilePic(this.profilePicUrl);
+      async saveName  () {
+        await updateUserName(this.displayName);
+        this.loading = false;
+        this.isEdit = false;
+      },
+      async saveProfilePicture() {
+        if (this.picUrlValid) {
+          await updateUserProfilePic(this.profilePicUrl);
         }
-        if(this.picFileValid){
-          profileService.savePhoto(this.profileFile);
+        if (this.picFileValid) {
+          await profileService.savePhoto(this.profileFile);
         }
+        this.loading = false;
         this.isEdit = false;
       },
       fileSelected(file) {
         Logger.info(`file ${JSON.stringify(file.name)}`);
         this.profileFile = file;
       },
-      countryAdded(hasChanged, newCountries){
+      countryAdded(hasChanged, newCountries) {
         this.countriesChanged = hasChanged;
-        this.newCountries = newCountries;
+        this.newCountries     = newCountries;
       }
     }
   };
