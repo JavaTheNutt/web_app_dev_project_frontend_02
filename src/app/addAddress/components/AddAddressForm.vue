@@ -38,14 +38,17 @@
                         :disabled="!saveAsDefaultEnabled"></v-checkbox>
           </v-layout>
         </v-flex>
-        <v-flex v-if="hasSingleDefault && !showCountrySelect">
+        <!--<v-flex v-if="hasSingleDefault && !showCountrySelect">
           Default Country: {{defaultCountries[0]}}
-        </v-flex>
-        <v-flex v-else-if="showCountrySelect">
+        </v-flex>-->
+        <v-flex v-if="showCountrySelect">
           <country-select
             :countries="countriesToShow"
             @countryAdded="countrySelected"
           ></country-select>
+        </v-flex>
+        <v-flex v-if="addressDetails.country !== ''">
+          <p><strong>Selected Country</strong> <em>{{addressDetails.country}}</em></p>
         </v-flex>
       </v-layout>
     </v-container>
@@ -74,6 +77,7 @@
         saveAsDefault: false
       };
     },
+    props:{formInView: Boolean},
     computed: {
       ...mapGetters({defaultCountries: profileTypes.getters.getDefaultCountries}),
       hasSingleDefault() {
@@ -97,15 +101,38 @@
     },
     mounted(){
       this.saveAsDefault = this.hasNoDefault;
+      this.addressDetails.country = this.hasSingleDefault ? this.defaultCountries[0]: '';
     },
     watch: {
       newCountrySelected(newVal) {
         this.saveAsDefault = newVal;
+        if(!newVal){
+          this.addressDetails.country = this.hasSingleDefault ? this.defaultCountries[0]: this.addressDetails.country;
+        }
+      },
+      formInView(newVal){
+        if(!newVal){
+          this.resetValues();
+        }
       }
     },
     methods: {
       countrySelected(country) {
-        this.country = country;
+        this.addressDetails.country = country;
+      },
+      resetValues(){
+        //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
+        Object.assign(this.$data, this.$options.data.call(this));
+        //found at: https://github.com/baianat/vee-validate/issues/285
+        this.$nextTick(function () {
+          const self = this;
+          Object.keys(this.fields).some(key => {
+            self.$validator.flag(key, {
+              untouched: true
+            });
+          });
+          this.errors.clear();
+        });
       }
     }
   };

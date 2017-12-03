@@ -10,7 +10,7 @@
         </v-layout>
         <v-layout row>
           <v-flex xs12>
-            <add-address-form></add-address-form>
+            <add-address-form :formInView="isEdit"></add-address-form>
           </v-flex>
         </v-layout>
         <v-layout row>
