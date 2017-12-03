@@ -13,6 +13,7 @@
             :error-messages="errors.collect('address01')"
             type="text"
             @input="emitFormData"
+            @blur="emitFormData"
           ></v-text-field>
         </v-flex>
         <v-flex>
@@ -22,6 +23,7 @@
             v-model="addressDetails.address02"
             type="text"
             @input="emitFormData"
+            @blur="emitFormData"
           ></v-text-field>
         </v-flex>
         <v-flex>
@@ -31,6 +33,7 @@
             v-model="addressDetails.address03"
             type="text"
             @input="emitFormData"
+            @blur="emitFormData"
           ></v-text-field>
         </v-flex>
         <v-flex>
@@ -107,12 +110,6 @@
         return this.address01HasNoErrors && this.addressDetails.country !== '';
       }
     },
-    /*mounted() {
-      this.$nextTick(function () {
-        this.addressDetails.country = this.defaultCountries.length === 1 ? this.defaultCountries[0] : '';
-
-      });
-    },*/
     watch: {
       newCountrySelected(newVal) {
         this.saveAsDefault = newVal;
@@ -150,10 +147,12 @@
         });
       },
       emitFormData() {
+        Logger.info('emit form data triggered');
         if (this.formValid) {
           Logger.info('form is valid, emiting data');
           return this.$emit('data-changed', {addressDetails:this.addressDetails, saveCountry: this.saveAsDefault});
         }
+        Logger.info('form data is invalid');
         return this.$emit('data-invalidated');
       }
     }
