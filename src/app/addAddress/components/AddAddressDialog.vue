@@ -42,9 +42,9 @@
       Bus.$on('hide_add_address', () => this.isEdit = false);
     },
     watch:{
-      isEdit(){
+      /*isEdit(){
         if(!this.isEdit) this.$emit('close');
-      }
+      }*/
     }
   };
 </script>

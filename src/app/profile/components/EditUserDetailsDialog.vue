@@ -163,6 +163,25 @@
       countryAdded(hasChanged, newCountries) {
         this.countriesChanged = hasChanged;
         this.newCountries     = newCountries;
+      },
+      resetValues(){
+        //found at: https://stackoverflow.com/a/40856312/4108556 resets data object to initial
+        Object.assign(this.$data, this.$options.data.call(this));
+        //found at: https://github.com/baianat/vee-validate/issues/285
+        this.$nextTick(function () {
+          const self = this;
+          Object.keys(this.fields).some(key => {
+            self.$validator.flag(key, {
+              untouched: true
+            });
+          });
+          this.errors.clear();
+        });
+      }
+    },
+    watch:{
+      isEdit(){
+        if(!this.isEdit) this.resetValues();
       }
     }
   };

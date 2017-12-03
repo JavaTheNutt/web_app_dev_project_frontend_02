@@ -109,9 +109,9 @@
         }
       },
       formInView(newVal){
-        if(!newVal){
-          this.resetValues();
-        }
+        if(!newVal) return this.resetValues();
+        return this.addressDetails.country = this.defaultCountries.length > 0 ? this.defaultCountries[0]: '';
+
       }
     },
     methods: {

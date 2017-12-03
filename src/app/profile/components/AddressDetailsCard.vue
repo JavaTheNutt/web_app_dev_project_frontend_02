@@ -13,7 +13,7 @@
         </v-btn>
       </v-card-actions>
     </v-container>
-    <add_address_dialog v-if="isEdit" @close="isEdit = false"></add_address_dialog>
+    <add_address_dialog></add_address_dialog>
   </v-card>
 </template>
 <script>
@@ -30,10 +30,12 @@
     methods:{
       addAddress(){
         this.isEdit = true;
-        this.$nextTick(() => {
-          Bus.$emit('show_add_address');
-        });
-      }
+        Bus.$emit('show_add_address');
+      }/*,
+      handleClose(){
+        const that = this;
+        this.$nextTick(() => that.isEdit = false);
+      }*/
     }
   };
 </script>
