@@ -43,6 +43,15 @@ export const addDefaultCountries  = async countries => {
   user.data().countries.concat(countries);
   const res = await userRef.set({countries});
 };
+export const addDefaultCountry = async country => {
+  const defaultCountries = Object.assign([], store.getters[profileTypes.getters.getDefaultCountries]);
+  if(defaultCountries.indexOf(country) !== -1){
+    Logger.warn('country exists in default countries, returning');
+    return;
+  }
+  defaultCountries.push(country);
+  await addDefaultCountries(defaultCountries);
+};
 export const fetchUserReference   = () => firebase.firestore().collection('users').doc(`${getCurrentUserId()}`);
 export const syncDefaultCountries = () => {
   fetchUserReference().onSnapshot(doc => {

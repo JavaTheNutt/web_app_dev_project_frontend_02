@@ -8,9 +8,14 @@
             </v-card-title>
           </v-flex>
         </v-layout>
-        <v-layout row>
+        <v-layout row v-if="!hasPossibleAddresses">
           <v-flex xs12>
             <add-address-form :formInView="isEdit" :defaultCountries="defaultCountries" @data-changed="dataChanged" @data-invalidated="dataInvalidated"></add-address-form>
+          </v-flex>
+        </v-layout>
+        <v-layout row v-if="hasPossibleAddresses">
+          <v-flex xs12>
+            <p v-for="address in formattedAddresses" :key="address">{{address}}</p>
           </v-flex>
         </v-layout>
         <v-layout row>
@@ -27,7 +32,9 @@
   import Bus from '@/app/events/bus';
   import {mapGetters} from 'vuex';
   import profileTypes from '@/app/profile/vuex/types';
-  import {fetchGeocodedAddress} from '../service/geocoding';
+  import {addDefaultCountry} from '@/app/profile/service/profileService';
+  import {fetchGeocodedAddress, fetchFormatted} from '../service/geocoding';
+  import * as Logger from 'loglevel';
 
   export default {
     components: {AddAddressForm},
@@ -36,11 +43,17 @@
       return {
         isEdit: false,
         addressDetails:{},
-        formValid: false
+        formValid: false,
+        possibleAddresses:[],
+        formattedAddresses:[],
+        saveCountry: false
       };
     },
     computed:{
       ...mapGetters({defaultCountries: profileTypes.getters.getDefaultCountries}),
+      hasPossibleAddresses(){
+        return this.possibleAddresses.length > 0;
+      }
     },
     created() {
       Bus.$on('show_add_address', () => this.isEdit = true);
@@ -49,7 +62,8 @@
     methods:{
       dataChanged(data){
         this.formValid = true;
-        this.addressDetails = data;
+        this.addressDetails = data.addressDetails;
+        this.saveCountry = data.saveCountry;
       },
       dataInvalidated(){
         this.formValid = false;
@@ -58,8 +72,18 @@
         Object.assign(this.$data, this.$options.data.call(this));
         this.isEdit = false;
       },
-      submitAddress(){
-        fetchGeocodedAddress(this.addressDetails);
+      async submitAddress(){
+        if(this.saveCountry){
+          await addDefaultCountry(this.addressDetails.country);
+        }
+        const geocodeResult = await fetchGeocodedAddress(this.addressDetails);
+        if(geocodeResult.error){
+          Logger.warn(`error during geocoding, ${JSON.stringify(geocodeResult.error)}`);
+          return;
+        }
+        Logger.info(`fetched results: ${JSON.stringify(geocodeResult)}`);
+        this.possibleAddresses = geocodeResult.results;
+        this.formattedAddresses = fetchFormatted(geocodeResult.results);
       }
     }
   };

@@ -107,12 +107,12 @@
         return this.address01HasNoErrors && this.addressDetails.country !== '';
       }
     },
-    mounted() {
-      this.saveAsDefault = this.hasNoDefault;
+    /*mounted() {
       this.$nextTick(function () {
         this.addressDetails.country = this.defaultCountries.length === 1 ? this.defaultCountries[0] : '';
+
       });
-    },
+    },*/
     watch: {
       newCountrySelected(newVal) {
         this.saveAsDefault = newVal;
@@ -125,6 +125,7 @@
         if (!newVal) {
           return this.resetValues();
         }
+        this.saveAsDefault = this.hasNoDefault;
         return this.addressDetails.country = this.defaultCountries.length > 0 ? this.defaultCountries[0] : '';
       }
     },
@@ -151,7 +152,7 @@
       emitFormData() {
         if (this.formValid) {
           Logger.info('form is valid, emiting data');
-          return this.$emit('data-changed', this.addressDetails);
+          return this.$emit('data-changed', {addressDetails:this.addressDetails, saveCountry: this.saveAsDefault});
         }
         return this.$emit('data-invalidated');
       }

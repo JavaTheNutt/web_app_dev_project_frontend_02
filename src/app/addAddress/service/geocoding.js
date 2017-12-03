@@ -3,11 +3,12 @@ import * as Logger from 'loglevel';
 
 const BASE_GEOCODE_URL            = 'https://maps.googleapis.com/maps/api/geocode/json';
 export const fetchGeocodedAddress = async addressDetails => await performFetch(createParams(formatAddress(addressDetails)));
+export const fetchFormatted = addresses => addresses.map(address => address.formatted_address);
 const performFetch                = async params => {
   try {
     const geocodeResult = await axios.get(BASE_GEOCODE_URL, {params});
-    Logger.info('fetch assumed successful');
-    return geocodeResult;
+    Logger.info(`fetch assumed successful, result: ${JSON.stringify(geocodeResult)}`);
+    return geocodeResult.data;
   } catch (e) {
     Logger.warn(`error fetching geocode result: ${JSON.stringify(e)}`);
     return {error: e};
