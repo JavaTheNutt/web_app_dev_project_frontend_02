@@ -12,7 +12,7 @@
             v-validate="'required|min:5'"
             :error-messages="errors.collect('address01')"
             type="text"
-            @blur="emitFormData"
+            @input="emitFormData"
           ></v-text-field>
         </v-flex>
         <v-flex>
@@ -21,7 +21,7 @@
             label="Address Line Two"
             v-model="addressDetails.line02"
             type="text"
-            @blur="emitFormData"
+            @input="emitFormData"
           ></v-text-field>
         </v-flex>
         <v-flex>
@@ -30,7 +30,7 @@
             label="Address Line Three"
             v-model="addressDetails.line03"
             type="text"
-            @blur="emitFormData"
+            @input="emitFormData"
           ></v-text-field>
         </v-flex>
         <v-flex>
