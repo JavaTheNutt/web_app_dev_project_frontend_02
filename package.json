@@ -31,10 +31,12 @@
     "firebase": "^4.6.2",
     "font-awesome": "^4.7.0",
     "localforage": "^1.5.5",
+    "lodash": "^4.17.4",
     "loglevel": "^1.6.0",
     "vee-validate": "^2.0.0-rc.21",
     "vue": "^2.3.3",
     "vue-router": "^2.3.1",
+    "vue2-google-maps": "^0.8.4",
     "vuetify": "^0.16.9",
     "vuex": "^3.0.1"
   },

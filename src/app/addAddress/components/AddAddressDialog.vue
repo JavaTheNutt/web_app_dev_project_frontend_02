@@ -27,7 +27,7 @@
               class="elevation-1">
               <template slot="headers" slot-scope="props">
                 <tr>
-                  <th>{{props.header}}</th>
+                  <th>{{props.text}}</th>
                 </tr>
               </template>
               <template slot="items" slot-scope="props">
@@ -48,7 +48,7 @@
           <v-spacer></v-spacer>
           <v-btn flat color="primary" @click.stop="closeDialog">Dismiss</v-btn>
           <v-btn flat color="accent" v-if="hasPossibleAddresses" @click.stop="addresses=[]">Back</v-btn>
-          <v-btn color="primary" :disabled="!formValid" @click.stop="submitAddress">Submit</v-btn>
+          <v-btn color="primary" :disabled="submitDisabled" @click.stop="submitAddress">Submit</v-btn>
         </v-layout>
         <v-layout row v-if="loading" align-center>
           <v-progress-circular indeterminate color="primary"></v-progress-circular>
@@ -83,7 +83,7 @@
         saveCountry: false,
         loading: false,
         headers: [{
-          header: 'Address',
+          text: 'Address',
           value: 'address'
         }],
         selectedAddress: [],
@@ -101,6 +101,9 @@
       },
       showPagination() {
         return this.addresses.length >= 10;
+      },
+      submitDisabled(){
+        return (!this.hasPossibleAddresses && !this.formValid) || (this.hasPossibleAddresses && this.selectedAddress.length === 0);
       }
     },
     created() {
@@ -131,13 +134,11 @@
           return;
         }
         Logger.info(`fetched results: ${JSON.stringify(geocodeResult)}`);
-        //this.possibleAddresses  = geocodeResult.results;
         this.addresses = Object.assign([], geocodeResult.results.map(address => ({
           text: address.formatted_address,
           loc: address.geometry.location,
           value: false
         })));
-        //this.formattedAddresses = fetchFormatted(geocodeResult.results);
         this.loading   = false;
       }, // eslint-disable-next-line consistent-return
       handleTableRowSelection(props) {

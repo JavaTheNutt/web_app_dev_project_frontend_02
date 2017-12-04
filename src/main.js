@@ -3,6 +3,7 @@
 
 import Vue from 'vue';
 import Vuetify from 'vuetify';
+import * as VueGoogleMaps from 'vue2-google-maps';
 import VeeValidate from 'vee-validate';
 import './stylus/main.styl';
 import App from './app/App';
@@ -17,6 +18,12 @@ import * as Logger from 'loglevel';
 Logger.setLevel(logLevel);
 Vue.use(Vuetify);
 Vue.use(VeeValidate);
+Vue.use(VueGoogleMaps, {
+  load:{
+    key: process.env.MAPS_API_KEY
+  }
+});
+Logger.info('vue maps loaded');
 Vue.config.productionTip = false;
 Vue.config.silent = logLevel === 'silent';
 Vue.prototype.$http      = http;

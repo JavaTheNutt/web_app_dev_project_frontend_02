@@ -63,6 +63,7 @@
   import {mapGetters} from 'vuex';
   import profileTypes from '@/app/profile/vuex/types';
   import CountrySelect from '../../profile/components/CountrySelect';
+  import _ from 'lodash';
 
   export default {
     components: {CountrySelect},
@@ -158,9 +159,14 @@
       }
     },
     created(){
-      if(this.cachedDetails === {}) return;
+      Logger.info('created called');
+      if(!this.cachedDetails || _.isEmpty(this.cachedDetails) || !this.cachedDetails.address01) return;
       this.addressDetails = Object.assign({}, this.cachedDetails);
-      if(this.addressDetails.address01.length > 0) this.$validator.flag('address01', {untouched:false, dirty:true});
+      if(this.addressDetails.address01.length > 0) {
+        this.$nextTick(function () {
+          this.$validator.flag('address01', {untouched:false, dirty:true, pristine: false});
+        });
+      }
     }
   };
 </script>
