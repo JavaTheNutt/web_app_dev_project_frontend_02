@@ -125,6 +125,15 @@
       },
       async submitAddress() {
         this.loading = true;
+        if(!this.hasPossibleAddresses){
+          await this.geocodeAddress();
+        }else{
+          Logger.info(`emitting address to parent: ${JSON.stringify(this.selectedAddress[0])}`);
+          this.$emit('address_selected', this.selectedAddress[0]);
+        }
+        this.loading   = false;
+      },
+      async geocodeAddress() {
         if (this.saveCountry) {
           await addDefaultCountry(this.addressDetails.country);
         }
@@ -139,8 +148,8 @@
           loc: address.geometry.location,
           value: false
         })));
-        this.loading   = false;
-      }, // eslint-disable-next-line consistent-return
+      },
+      // eslint-disable-next-line consistent-return
       handleTableRowSelection(props) {
         if (this.selectedAddress.length === 0) {
           return props.selected = true;

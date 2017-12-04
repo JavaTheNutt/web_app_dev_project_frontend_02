@@ -6,6 +6,23 @@
           <v-card-title primary-title><h3 class="headline mb-0 pb-0 text-xs-center">Addresses</h3></v-card-title>
         </v-flex>
       </v-layout>
+      <v-list v-if="addresses.length > 0">
+        <v-list-group v-for="address in addresses" :key="address.text">
+          <v-list-tile slot="item">
+            <v-list-tile-content>
+              <v-list-tile-title>{{address.text}}</v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-icon>keyboard_arrow_down</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-content>
+              
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
+      </v-list>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn fab color="accent" dark @click.stop="addAddress">
@@ -13,29 +30,51 @@
         </v-btn>
       </v-card-actions>
     </v-container>
-    <add_address_dialog></add_address_dialog>
+    <add_address_dialog @address_selected="saveAddress"></add_address_dialog>
   </v-card>
 </template>
 <script>
   import Add_address_dialog from '../../addAddress/components/AddAddressDialog';
   import Bus from '@/app/events/bus';
+  import * as Logger from 'loglevel';
+  import * as profileService from '../service/profileService';
+  import firebase from 'firebase';
+  import {mapGetters} from 'vuex';
+  import authTypes from '@/app/auth/vuex/types';
+
   export default {
     components: {Add_address_dialog},
     name: 'address-details-card',
-    data(){
+    data() {
       return {
-        isEdit: false
+        isEdit: false,
+        addresses: []
       };
     },
-    methods:{
-      addAddress(){
+    computed: {
+      ...mapGetters({loggedIn: authTypes.getters.getLoggedIn})
+    },
+    watch: {
+      //if this page is loaded before login state is updated, attempts to attach a listener to the collection will fail
+      loggedIn(newVal) {
+        Logger.info('logged in watcher triggered in address details component');
+        if (newVal) {
+          profileService.fetchUserReference().collection('addresses').onSnapshot(doc => {
+            this.addresses = [];
+            doc.forEach(address => this.addresses.push(address.data()));
+          });
+        }
+      }
+    },
+    methods: {
+      addAddress() {
         this.isEdit = true;
         Bus.$emit('show_add_address');
-      }/*,
-      handleClose(){
-        const that = this;
-        this.$nextTick(() => that.isEdit = false);
-      }*/
+      },
+      saveAddress(address) {
+        Logger.info(`address: ${JSON.stringify(address)}`);
+        profileService.addAddress(address);
+      }
     }
   };
 </script>
