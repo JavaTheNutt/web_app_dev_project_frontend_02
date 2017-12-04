@@ -6,7 +6,24 @@
           <v-card-title primary-title><h3 class="headline mb-0 pb-0 text-xs-center">Addresses</h3></v-card-title>
         </v-flex>
       </v-layout>
-      <v-list v-if="addresses.length > 0">
+      <v-card  v-if="addresses.length >0" v-for="address in addresses" :key="address.text">
+        <v-card-title primary-title><h3 class="headline">{{address.text}}</h3></v-card-title>
+        <v-card-actions>
+          <v-btn icon @click.stop="address.mapShown = !address.mapShown">
+            <v-icon>{{address.mapShown ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}}</v-icon>
+          </v-btn>
+        </v-card-actions>
+        <v-slide-y-transition>
+          <v-card-media v-show="address.mapShown">
+            <gmap-map :center="{lat:address.loc.lat, lng:address.loc.lng}" :zoom="8" style="height:300px; width:100%">
+              <gmap-marker :position="{lat:address.loc.lat, lng:address.loc.lng}">
+              </gmap-marker>
+            </gmap-map>
+          </v-card-media>
+        </v-slide-y-transition>
+      </v-card>
+      <!--<v-list v-if="addresses.length > 0">
+
         <v-list-group v-for="address in addresses" :key="address.text">
           <v-list-tile slot="item">
             <v-list-tile-content>
@@ -17,12 +34,20 @@
             </v-list-tile-action>
           </v-list-tile>
           <v-list-tile>
-            <v-list-tile-content>
-              
+            <v-list-tile-content style="height:500px">
+              <div >
+                <gmap-map :center="{lat:1.38, lng:103.8}" :zoom="12" style="height:300px; width:300px">
+                  <gmap-marker :position="{lat:1.38, lng:103.8}">
+                  </gmap-marker>
+                  <gmap-info-window :position="{lat:1.38, lng:103.8}">
+                    Hello world!
+                  </gmap-info-window>
+                </gmap-map>
+              </div>
             </v-list-tile-content>
           </v-list-tile>
         </v-list-group>
-      </v-list>
+      </v-list>-->
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn fab color="accent" dark @click.stop="addAddress">
@@ -61,7 +86,7 @@
         if (newVal) {
           profileService.fetchUserReference().collection('addresses').onSnapshot(doc => {
             this.addresses = [];
-            doc.forEach(address => this.addresses.push(address.data()));
+            doc.forEach(address => this.addresses.push(Object.assign({mapShown: false}, address.data())));
           });
         }
       }
