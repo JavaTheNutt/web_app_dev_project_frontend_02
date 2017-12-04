@@ -10,7 +10,7 @@
         </v-layout>
         <v-layout row v-if="!hasPossibleAddresses">
           <v-flex xs12>
-            <add-address-form :formInView="isEdit" :defaultCountries="defaultCountries" @data-changed="dataChanged"
+            <add-address-form :formInView="isEdit" :defaultCountries="defaultCountries" :cachedDetails="addressDetails" @data-changed="dataChanged"
                               @data-invalidated="dataInvalidated"></add-address-form>
           </v-flex>
         </v-layout>
@@ -31,18 +31,23 @@
                 </tr>
               </template>
               <template slot="items" slot-scope="props">
-                <tr>
+                <tr :active="props.selected" @click="handleTableRowSelection(props)">
+                  <td>
+                    <v-checkbox
+                      color="primary"
+                      hide-details
+                      :input-value="props.selected"></v-checkbox>
+                  </td>
                   <td>{{props.item.text}}</td>
                 </tr>
               </template>
             </v-data-table>
-            <!--<select-address-table
-              :addresses="addresses"></select-address-table>-->
           </v-flex>
         </v-layout>
         <v-layout row v-if="!loading">
           <v-spacer></v-spacer>
           <v-btn flat color="primary" @click.stop="closeDialog">Dismiss</v-btn>
+          <v-btn flat color="accent" v-if="hasPossibleAddresses" @click.stop="addresses=[]">Back</v-btn>
           <v-btn color="primary" :disabled="!formValid" @click.stop="submitAddress">Submit</v-btn>
         </v-layout>
         <v-layout row v-if="loading" align-center>
@@ -61,8 +66,6 @@
   import {fetchGeocodedAddress, fetchFormatted} from '../service/geocoding';
   import * as Logger from 'loglevel';
   import SelectAddressTable from './DisplayAddressTable';
-  /*
-	import SelectAddressTable from './DisplayAddressTable';*/
 
   export default {
     components: {
@@ -74,18 +77,21 @@
     data() {
       return {
         isEdit: false,
-        addresses:[],
+        addresses: [],
         addressDetails: {},
         formValid: false,
-        possibleAddresses: [],
-        formattedAddresses: [],
         saveCountry: false,
         loading: false,
-        headers:[{header:'Address', value: 'address'}],
-        selectedAddress:[],
-        pagination:{
+        headers: [{
+          header: 'Address',
+          value: 'address'
+        }],
+        selectedAddress: [],
+        pagination: {
           rowsPerPage: 10
-        }
+        },
+        address: [],
+        formData:{}
       };
     },
     computed: {
@@ -93,7 +99,7 @@
       hasPossibleAddresses() {
         return this.addresses.length > 0;
       },
-      showPagination(){
+      showPagination() {
         return this.addresses.length >= 10;
       }
     },
@@ -125,14 +131,25 @@
           return;
         }
         Logger.info(`fetched results: ${JSON.stringify(geocodeResult)}`);
-        this.possibleAddresses  = geocodeResult.results;
-        this.addresses = Object.assign([], this.possibleAddresses.map(address => ({
+        //this.possibleAddresses  = geocodeResult.results;
+        this.addresses = Object.assign([], geocodeResult.results.map(address => ({
           text: address.formatted_address,
           loc: address.geometry.location,
           value: false
         })));
-        this.formattedAddresses = fetchFormatted(geocodeResult.results);
-        this.loading            = false;
+        //this.formattedAddresses = fetchFormatted(geocodeResult.results);
+        this.loading   = false;
+      }, // eslint-disable-next-line consistent-return
+      handleTableRowSelection(props) {
+        if (this.selectedAddress.length === 0) {
+          return props.selected = true;
+        }
+        if (this.selectedAddress[0].text === props.item.text) {
+          return this.selectedAddress = [];
+        }
+        this.selectedAddress = [];
+        //allow ui to refresh before updating model to allow previous to be removed
+        this.$nextTick(() => props.selected = true);
       }
     }
   };

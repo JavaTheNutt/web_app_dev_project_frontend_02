@@ -82,7 +82,8 @@
     },
     props: {
       formInView: Boolean,
-      defaultCountries: Array
+      defaultCountries: Array,
+      cachedDetails: Object
     },
     computed: {
       hasSingleDefault() {
@@ -155,6 +156,11 @@
         Logger.info('form data is invalid');
         return this.$emit('data-invalidated');
       }
+    },
+    created(){
+      if(this.cachedDetails === {}) return;
+      this.addressDetails = Object.assign({}, this.cachedDetails);
+      if(this.addressDetails.address01.length > 0) this.$validator.flag('address01', {untouched:false, dirty:true});
     }
   };
 </script>
