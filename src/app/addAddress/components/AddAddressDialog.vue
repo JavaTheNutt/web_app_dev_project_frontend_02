@@ -99,6 +99,7 @@
       close(newVal){
         if(newVal){
           this.isEdit = false;
+          this.resetData();
         }
       }
     },
@@ -168,6 +169,9 @@
         this.selectedAddress = [];
         //allow ui to refresh before updating model to allow previous to be removed
         this.$nextTick(() => props.selected = true);
+      },
+      resetData(){
+        Object.assign(this.$data, this.$options.data.call(this));
       }
     }
   };
