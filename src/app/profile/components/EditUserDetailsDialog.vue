@@ -131,7 +131,7 @@
         this.loading = true;
         if (this.hasUsername) {
           return this.saveName();
-        } else if (this.hasPicUrl) {
+        } else if (this.hasPicUrl || this.hasPicFile) {
           return this.saveProfilePicture();
         }
         return this.saveCountries();
@@ -148,10 +148,13 @@
       },
       async saveProfilePicture() {
         if (this.picUrlValid) {
+          Logger.info('picture url is valid, saving');
           await updateUserProfilePic(this.profilePicUrl);
-        }
-        if (this.picFileValid) {
+        } else if (this.picFileValid) {
+          Logger.info('pic file is valid, saving');
           await profileService.savePhoto(this.profileFile);
+        } else{
+          Logger.info('nothing to save');
         }
         this.loading = false;
         this.isEdit = false;

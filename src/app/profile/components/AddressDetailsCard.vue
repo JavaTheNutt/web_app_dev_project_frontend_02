@@ -33,7 +33,7 @@
           </v-card-media>
         </v-slide-y-transition>
       </v-card>
-      <p v-if="addresses.length === 0">There are no addresses to display</p>
+      <v-card-text v-if="addresses.length === 0" class="text-xs-center"><p>There are no addresses to display</p></v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn fab color="accent" dark @click.stop="addAddress">
