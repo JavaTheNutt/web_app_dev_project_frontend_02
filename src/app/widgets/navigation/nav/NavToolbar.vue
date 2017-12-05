@@ -30,7 +30,7 @@
     computed:{
       ...mapGetters({loggedIn: authTypes.getters.getLoggedIn, userPhotoUrl: authTypes.getters.getPhotoUrl}),
       photoUrl(){
-        return this.userPhotoUrl !== ''? this.userPhotoUrl : defaultProfilePic;
+        return !this.userPhotoUrl || this.userPhotoUrl === '' ? defaultProfilePic: this.userPhotoUrl  ;
       }
     },
     methods: {

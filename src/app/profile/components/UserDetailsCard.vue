@@ -28,6 +28,7 @@
   import defaultProfilePic from '@/assets/defaultProf.png';
   import ProfileBus from '../service/ProfileBus';
   import EditUserDialog from './EditUserDetailsDialog';
+  import * as Logger from 'loglevel';
 
   import * as profileService from '../service/profileService';
 
@@ -41,7 +42,8 @@
         email: authTypes.getters.getEmail
       }),
       photoUrl() {
-        return this.userPhotoUrl !== '' ? this.userPhotoUrl : defaultProfilePic;
+        Logger.info(`photo url: ${this.userPhotoUrl}`);
+        return !this.userPhotoUrl || this.userPhotoUrl === '' ? defaultProfilePic: this.userPhotoUrl  ;
       },
       isFirebasePhoto() {
         return profileService.isFirebaseProfilePic(this.userPhotoUrl);
@@ -57,6 +59,9 @@
       return {
         isEdit: false
       };
+    },
+    created(){
+      Logger.info(`default pic: ${JSON.stringify(defaultProfilePic)}`);
     }
   };
 </script>
