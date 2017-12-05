@@ -6,14 +6,15 @@
           <v-card-title primary-title><h3 class="headline mb-0 pb-0 text-xs-center">Addresses</h3></v-card-title>
         </v-flex>
       </v-layout>
-      <v-card  v-if="addresses.length >0" v-for="address in addresses" :key="address.text">
+      <v-card v-if="addresses.length >0" v-for="address in addresses" :key="address.text" class="my-5 elevation-10">
         <v-container fluid>
-          <v-layout align-center>
+          <v-layout align-center column>
             <v-flex xs12>
-              <v-card-title primary-title class="text-xs-center"><h3 class="headline">{{address.text}}</h3></v-card-title>
+              <v-card-title primary-title class="text-xs-center"><h3 class="headline">{{address.text}}</h3>
+              </v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn icon @click.stop="deleteAddress(address.id)">
+                <v-btn icon @click.stop="deleteAddressClicked(address)">
                   <v-icon>delete forever</v-icon>
                 </v-btn>
                 <v-btn icon @click.stop="address.mapShown = !address.mapShown">
@@ -32,6 +33,7 @@
           </v-card-media>
         </v-slide-y-transition>
       </v-card>
+      <p v-if="addresses.length === 0">There are no addresses to display</p>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn fab color="accent" dark @click.stop="addAddress">
@@ -39,7 +41,25 @@
         </v-btn>
       </v-card-actions>
     </v-container>
-    <add_address_dialog @address_selected="saveAddress"></add_address_dialog>
+    <add_address_dialog @address_selected="saveAddress" :close="itemSaved"></add_address_dialog>
+    <v-layout row justify-center>
+      <v-dialog v-model="confirmAddressDeletion" persistent max-width="400">
+        <v-card>
+          <v-card-title class="headline">Delete Address?</v-card-title>
+          <v-card-text>Are you sure you wish to delete this address?</v-card-text>
+          <v-card-text>{{addressToBeDeleted.text}}</v-card-text>
+          <v-card-actions v-if="!confirmDeleteLoading">
+            <v-spacer></v-spacer>
+            <v-btn color="primary darken-1" flat @click.native="handleConfirmDeletion(false)">Cancel</v-btn>
+            <v-btn color="primary darken-1" flat @click.native="handleConfirmDeletion(true)">Delete</v-btn>
+          </v-card-actions>
+          <v-card-actions v-if="confirmDeleteLoading">
+            <v-spacer></v-spacer>
+            <v-progress-circular indeterminate color="primary"></v-progress-circular>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
   </v-card>
 </template>
 <script>
@@ -57,7 +77,11 @@
     data() {
       return {
         isEdit: false,
-        addresses: []
+        addresses: [],
+        confirmAddressDeletion: false,
+        addressToBeDeleted: {},
+        itemSaved: false,
+        confirmDeleteLoading: false
       };
     },
     computed: {
@@ -70,30 +94,51 @@
         if (newVal) {
           profileService.fetchUserReference().collection('addresses').onSnapshot(doc => {
             this.addresses = [];
-            doc.forEach(address => this.addresses.push(Object.assign({mapShown: false, id: address.id}, address.data())));
+            doc.forEach(address => this.addresses.push(Object.assign({
+              mapShown: false,
+              id: address.id
+            }, address.data())));
           });
         }
       }
     },
     methods: {
       addAddress() {
-        this.isEdit = true;
+        this.itemSaved = false;
         Bus.$emit('show_add_address');
       },
-      saveAddress(address) {
+      async saveAddress(address) {
         Logger.info(`address: ${JSON.stringify(address)}`);
-        profileService.addAddress(address);
+        await  profileService.addAddress(address);
+        this.itemSaved = true;
       },
-      deleteAddress(addressId){
+      async deleteAddress(addressId) {
+        this.confirmDeleteLoading = true;
         Logger.info(`attempting to delete address with id ${addressId}`);
-        profileService.deleteAddress(addressId);
+        await profileService.deleteAddress(addressId);
+        this.addressToBeDeleted = {};
+        this.confirmDeleteLoading = false;
+        this.confirmAddressDeletion = false;
+      },
+      async handleConfirmDeletion(isDelete) {
+        if (isDelete) {
+          await this.deleteAddress(this.addressToBeDeleted.id);
+        }
+        this.confirmAddressDeletion = false;
+      },
+      deleteAddressClicked(address) {
+        this.addressToBeDeleted = address;
+        this.confirmAddressDeletion = true;
       }
     },
-    mounted(){
-      if(this.loggedIn){
+    mounted() {
+      if (this.loggedIn) {
         profileService.fetchUserReference().collection('addresses').onSnapshot(doc => {
           this.addresses = [];
-          doc.forEach(address => this.addresses.push(Object.assign({mapShown: false, id: address.id}, address.data())));
+          doc.forEach(address => this.addresses.push(Object.assign({
+            mapShown: false,
+            id: address.id
+          }, address.data())));
         });
       }
     }

@@ -94,6 +94,14 @@
         formData:{}
       };
     },
+    props:{close: Boolean},
+    watch:{
+      close(newVal){
+        if(newVal){
+          this.isEdit = false;
+        }
+      }
+    },
     computed: {
       ...mapGetters({defaultCountries: profileTypes.getters.getDefaultCountries}),
       hasPossibleAddresses() {
@@ -127,11 +135,11 @@
         this.loading = true;
         if(!this.hasPossibleAddresses){
           await this.geocodeAddress();
+          this.loading   = false;
         }else{
           Logger.info(`emitting address to parent: ${JSON.stringify(this.selectedAddress[0])}`);
           this.$emit('address_selected', this.selectedAddress[0]);
         }
-        this.loading   = false;
       },
       async geocodeAddress() {
         if (this.saveCountry) {

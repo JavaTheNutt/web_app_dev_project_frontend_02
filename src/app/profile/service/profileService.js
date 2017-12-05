@@ -40,10 +40,14 @@ export const addDefaultCountries          = async countries => {
     return;
   }
   //Logger.info(`user: ${JSON.stringify(user)}`);
-  user.data().countries.concat(countries);
-  const res = await userRef.set({countries});
+  let newCountries;
+  if(user.data().countries){
+    newCountries = user.data().countries.concat(countries);
+  }
+  const res = await userRef.set({countries: newCountries || countries});
 };
 export const addDefaultCountry            = async country => {
+
   const defaultCountries = Object.assign([], store.getters[profileTypes.getters.getDefaultCountries]);
   if (defaultCountries.indexOf(country) !== -1) {
     Logger.warn('country exists in default countries, returning');
@@ -54,15 +58,20 @@ export const addDefaultCountry            = async country => {
 };
 export const fetchUserReference           = () => firebase.firestore().collection('users').doc(`${getCurrentUserId()}`);
 export const syncDefaultCountries         = () => {
-  fetchUserReference().collection('countries').onSnapshot(doc => {
-    const countries = [];
-    doc.forEach(country => countries.push(country.data()));
+  fetchUserReference()/*.collection('countries')*/.onSnapshot(doc => {
+    let countries = [];
+    //Logger.info(`country snapshot triggered: ${JSON.stringify(doc)}`);
+    /*doc.forEach(country => {
+      Logger.info(`getting countries: ${JSON.stringify(country.data())}`);
+      countries.push(Object.assign());
+    });*/
+    Logger.info(`countries: ${JSON.stringify(doc.data())}`);
+    countries = doc.data().countries;
     store.commit(profileTypes.mutations.SET_DEFAULT_COUNTRIES, {defaultCountries: countries || []});
   });
 };
 export const addAddress                   = async address => {
   const res = await fetchUserReference().collection('addresses').add(address);
-  Logger.info(`result of address save: ${JSON.stringify(res)}`);
 };
 export const deleteAddress = async addressId => {
   const res = await fetchUserReference().collection('addresses').doc(addressId).delete();
