@@ -64,6 +64,9 @@ export const addAddress                   = async address => {
   const res = await fetchUserReference().collection('addresses').add(address);
   Logger.info(`result of address save: ${JSON.stringify(res)}`);
 };
+export const deleteAddress = async addressId => {
+  const res = await fetchUserReference().collection('addresses').doc(addressId).delete();
+};
 export const fetchPhotoUrl                = () => {
   const user = getCurrentUser();
   if (user.error) {
