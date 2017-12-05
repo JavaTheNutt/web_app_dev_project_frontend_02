@@ -41,7 +41,7 @@ export const addDefaultCountries          = async countries => {
   }
   //Logger.info(`user: ${JSON.stringify(user)}`);
   let newCountries;
-  if(user.data().countries){
+  if (user.data().countries) {
     newCountries = user.data().countries.concat(countries);
   }
   const res = await userRef.set({countries: newCountries || countries});
@@ -63,17 +63,20 @@ export const syncDefaultCountries         = () => {
     //Logger.info(`country snapshot triggered: ${JSON.stringify(doc)}`);
     /*doc.forEach(country => {
       Logger.info(`getting countries: ${JSON.stringify(country.data())}`);
-      countries.push(Object.assign());
+      countries.push(Object.assign({},country.data()));
     });*/
-    Logger.info(`countries: ${JSON.stringify(doc.data())}`);
-    countries = doc.data().countries;
+    if (doc.exists) {
+      countries = doc.data().countries;
+    }
     store.commit(profileTypes.mutations.SET_DEFAULT_COUNTRIES, {defaultCountries: countries || []});
   });
 };
+export const unsubscribeFromCountries            = () => fetchUserReference().onSnapshot(() => {
+});
 export const addAddress                   = async address => {
   const res = await fetchUserReference().collection('addresses').add(address);
 };
-export const deleteAddress = async addressId => {
+export const deleteAddress                = async addressId => {
   const res = await fetchUserReference().collection('addresses').doc(addressId).delete();
 };
 export const fetchPhotoUrl                = () => {

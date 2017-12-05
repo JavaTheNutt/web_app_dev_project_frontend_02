@@ -5,6 +5,7 @@ import store from '@/store';
 import types from '../vuex/types';
 import router from '@/router';
 import {syncDefaultCountries} from '@/app/profile/service/profileService';
+import {resetStore} from '../../service/logout/logout';
 
 const googleProvider   = new firebase.auth.GoogleAuthProvider();
 const facebookProvider = new firebase.auth.FacebookAuthProvider();
@@ -75,7 +76,7 @@ export const testAuthState                                = user => {
 export const updateLocalProfile                           = user => {
   if (!user) {
     Logger.info('no user logged in to firebase, logging out locally');
-    store.commit(types.mutations.UNSET_USER);
+    resetStore();
     return false;
   }
   const details = {displayName: user.displayName, photoUrl: user.photoURL, email:  user.email};
