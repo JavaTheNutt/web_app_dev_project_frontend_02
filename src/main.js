@@ -25,7 +25,8 @@ Vue.use(VueGoogleMaps, {
 });
 Logger.info('vue maps loaded');
 Vue.config.productionTip = false;
-Vue.config.silent = logLevel === 'silent';
+Vue.config.silent = process.env.NODE_ENV !== 'development';
+Vue.config.devtools = !Vue.config.silent;
 Vue.prototype.$http      = http;
 firebase.initializeApp(firebaseKey);
 /* eslint-disable no-new */

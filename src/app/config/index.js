@@ -7,4 +7,4 @@ export const firebaseKey    = {
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
 };
 export const backendBaseUrl = process.env.BACKEND_BASE_URL || 'localhost:3000/';
-export const logLevel   = process.env.LOG_LEVEL || process.env.NODE_ENV === 'development' ? 'trace' : 'silent';
+export const logLevel   = process.env.LOG_LEVEL || (process.env.NODE_ENV === 'development' ? 'trace' : 'silent');

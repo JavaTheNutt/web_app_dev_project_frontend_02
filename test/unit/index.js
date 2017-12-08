@@ -1,6 +1,9 @@
 import Vue from 'vue';
-
+import * as Logger from 'loglevel';
+Logger.setLevel('silent');
 Vue.config.productionTip = false;
+Vue.config.silent = true;
+Vue.config.devtools = false;
 
 // require all test files (files that ends with .spec.js)
 const testsContext = require.context('../../src', true, /\.spec$/);
