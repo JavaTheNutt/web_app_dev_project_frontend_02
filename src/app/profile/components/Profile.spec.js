@@ -57,7 +57,7 @@ describe('Profile.vue', () => {
     const addressDetailsComponent = wrapper.find(UserDetailsCard);
     expect(addressDetailsComponent.is(UserDetailsCard)).to.be.true;
   });
-  it('should correctly extract the first name from the surname', ()=>{
+  it('should correctly extract the first name from the surname', () => {
     getDisplayNameStub.returns('Joe Bloggs');
     const wrapper = shallow(Profile, {
       store,
