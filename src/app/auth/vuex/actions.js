@@ -2,6 +2,7 @@ import types from './types';
 import firebase from 'firebase';
 import * as Logger from 'loglevel';
 import * as firebaseService from '../service/firebaseService';
+import {addDefaultCountry} from '../../profile/service/defaultCountries';
 
 export default {
   [types.actions.registerAuthStateListener]: ({dispatch}) => {
@@ -11,8 +12,7 @@ export default {
   },
   [types.actions.testCurrentAuthState]: ({commit}) => {
     Logger.info('auth state listener triggered');
-    return commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: firebaseService.testAuthState(firebase.auth().currentUser)});
-
+    commit(types.mutations.SET_LOGGED_IN, {isLoggedIn: firebaseService.testAuthState(firebase.auth().currentUser)});
   },
   [types.actions.setProviderIds]: ({commit}, {newProviderId, preferredProviderId, credential}) => commit(types.mutations.SET_PROVIDER_IDS, {
     newProviderId,

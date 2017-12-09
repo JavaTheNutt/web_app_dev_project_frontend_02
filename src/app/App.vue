@@ -18,6 +18,7 @@
   import Snackbar from './widgets/snackbar/snackbar';
   import {mapGetters} from 'vuex';
   import ConfirmAuthLink from './auth/components/ConfirmAuthLink';
+  import {addDefaultCountry} from './profile/service/defaultCountries';
 
   export default {
     components: {
@@ -33,6 +34,7 @@
     },
     created() {
       this.$store.dispatch(authTypes.actions.registerAuthStateListener);
+
     }
   };
 </script>

@@ -72,6 +72,7 @@
   import {updateUserName, updateUserProfilePic} from '@/app/auth/service/firebaseService';
   import FileInput from '../../widgets/fileInput/FileInput';
   import * as profileService from '../service/profileService';
+  import {addDefaultCountry} from '../service/defaultCountries';
   import ManageDefaultCountries from './ManageDefaultCountries';
 
   export default {
