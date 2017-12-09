@@ -5,6 +5,7 @@ import DefaultProfilePic from '@/assets/defaultProf.png';
 import * as Logger from 'loglevel';
 import store from '@/store';
 import profileTypes from '../vuex/types';
+import {fetchDoc} from '../../service/firestore';
 //const db = firebase.firestore();
 export const fetchFirebaseProfilePicUrl   = async () => {
   const id = getCurrentUserId();
@@ -32,6 +33,7 @@ export const savePhoto                    = file => {
   });
 };
 export const addDefaultCountries          = async countries => {
+  Logger.info(`attempting to add default countries: ${JSON.stringify(countries)}`);
   const userRef = fetchUserReference();
   const user    = await userRef.get();
   if (!user.exists) {
@@ -42,12 +44,12 @@ export const addDefaultCountries          = async countries => {
   //Logger.info(`user: ${JSON.stringify(user)}`);
   let newCountries;
   if (user.data().countries) {
-    newCountries = user.data().countries.concat(countries);
+    Logger.info(`current default countries: ${JSON.stringify(user.data().countries)}`);
+    newCountries = user.data().countries.filter(country => countries.indexOf(country) === -1).concat(countries);
   }
   const res = await userRef.set({countries: newCountries || countries});
 };
 export const addDefaultCountry            = async country => {
-
   const defaultCountries = Object.assign([], store.getters[profileTypes.getters.getDefaultCountries]);
   if (defaultCountries.indexOf(country) !== -1) {
     Logger.warn('country exists in default countries, returning');
@@ -57,21 +59,27 @@ export const addDefaultCountry            = async country => {
   await addDefaultCountries(defaultCountries);
 };
 export const fetchUserReference           = () => firebase.firestore().collection('users').doc(`${getCurrentUserId()}`);
-export const syncDefaultCountries         = () => {
-  fetchUserReference()/*.collection('countries')*/.onSnapshot(doc => {
-    let countries = [];
+export const syncDefaultCountries         = () => fetchUserReference()/*.collection('countries')*/.onSnapshot(doc => {
+  let countries = [];
     //Logger.info(`country snapshot triggered: ${JSON.stringify(doc)}`);
     /*doc.forEach(country => {
       Logger.info(`getting countries: ${JSON.stringify(country.data())}`);
       countries.push(Object.assign({},country.data()));
     });*/
-    if (doc.exists) {
-      countries = doc.data().countries;
-    }
-    store.commit(profileTypes.mutations.SET_DEFAULT_COUNTRIES, {defaultCountries: countries || []});
-  });
+  if (doc.exists) {
+    countries = doc.data().countries;
+  }
+  store.commit(profileTypes.mutations.SET_DEFAULT_COUNTRIES, {defaultCountries: countries || []});
+});
+export const handleSyncCollection         = (path, callback) => fetchUserReference().collection(path).onSnapshot(callback);
+export const handleSyncDoc                = (path, callback) => {
+  fetchUserReference().doc(path).onSnapshot(callback);
 };
-export const unsubscribeFromCountries            = () => fetchUserReference().onSnapshot(() => {
+export const unsyncFromDoc                = path => fetchUserReference().doc(path).onSnapshot(() => {
+});
+export const unsyncFromCollection               = path => fetchUserReference().collection(path).onSnapshot(() => {
+});
+export const unsubscribeFromCountries     = () => fetchUserReference().onSnapshot(() => {
 });
 export const addAddress                   = async address => {
   const res = await fetchUserReference().collection('addresses').add(address);
@@ -91,4 +99,9 @@ export const fetchPhotoUrl                = () => {
     return fetchFirebaseProfilePicUrl();
   }
   return null;
+};
+export const fetchCountries = async () => {
+  const user = await fetchDoc();
+  if(user.error) return user;
+  return user.countries || [];
 };

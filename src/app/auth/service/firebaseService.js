@@ -79,10 +79,14 @@ export const updateLocalProfile                           = user => {
     resetStore();
     return false;
   }
-  const details = {displayName: user.displayName, photoUrl: user.photoURL, email:  user.email};
+  const details = {
+    displayName: user.displayName,
+    photoUrl: user.photoURL,
+    email: user.email
+  };
   Logger.info(`details: ${JSON.stringify(details)}`);
   store.dispatch(types.actions.setUser, {userDetails: details});
-  syncDefaultCountries();
+  //syncDefaultCountries();
   Logger.info('user logged in to firebase, logging in locally');
   return true;
 };
@@ -170,6 +174,12 @@ export const handleAuthExistsWithDifferentCredentialError = async (error, provid
     credential: error.credential
   });
   Bus.$emit('confirm_account_link');
+};
+export const fetchUserId                                  = () => {
+  if (!firebase.auth().currentUser) {
+    return {error: 'no user logged in'};
+  }
+  return firebase.auth().currentUser.uid;
 };
 export const fetchProviderNameFromId                      = id => {
   switch (id) {

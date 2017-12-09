@@ -18,9 +18,11 @@
 </template>
 <script>
   import countryList from 'country-list';
-  import {mapGetters} from 'vuex';
+  import {fetchDoc} from '../../service/firestore';
+  import {fetchCountries} from '../service/profileService';
   import types from '../vuex/types';
   import CountrySelect from './CountrySelect';
+  import * as Logger from 'loglevel';
 
   export default {
     name: 'manage-default-countries',
@@ -35,7 +37,6 @@
       };
     },
     computed: {
-      ...mapGetters({defaultCountries: types.getters.getDefaultCountries}),
       filteredCountries() {
         return this.countries.filter(country => this.currentCountries.indexOf(country) === -1);
       },
@@ -66,9 +67,11 @@
         this.triggerChange();
       }
     },
-    mounted() {
-      this.initialCountries = Object.assign([], this.defaultCountries);
-      this.currentCountries = Object.assign([], this.defaultCountries);
+    async mounted() {
+      const defaultCountries = await fetchCountries();
+      Logger.info(`default countries: ${JSON.stringify(defaultCountries)}`);
+      this.initialCountries = Object.assign([], defaultCountries);
+      this.currentCountries = Object.assign([], this.initialCountries);
     }
   };
 </script>

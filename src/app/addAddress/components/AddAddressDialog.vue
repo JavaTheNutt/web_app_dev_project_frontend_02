@@ -62,7 +62,7 @@
   import Bus from '@/app/events/bus';
   import {mapGetters} from 'vuex';
   import profileTypes from '@/app/profile/vuex/types';
-  import {addDefaultCountry} from '@/app/profile/service/profileService';
+  import {addDefaultCountry, fetchCountries} from '@/app/profile/service/profileService';
   import {fetchGeocodedAddress, fetchFormatted} from '../service/geocoding';
   import * as Logger from 'loglevel';
   import SelectAddressTable from './DisplayAddressTable';
@@ -91,20 +91,22 @@
           rowsPerPage: 10
         },
         address: [],
-        formData:{}
+        formData:{},
+        defaultCountries: []
       };
     },
     props:{close: Boolean},
     watch:{
       close(newVal){
         if(newVal){
+          Logger.info('watcher caught dialog closed event');
           this.isEdit = false;
           this.resetData();
         }
       }
     },
     computed: {
-      ...mapGetters({defaultCountries: profileTypes.getters.getDefaultCountries}),
+      //...mapGetters({defaultCountries: profileTypes.getters.getDefaultCountries}),
       hasPossibleAddresses() {
         return this.addresses.length > 0;
       },
@@ -116,7 +118,11 @@
       }
     },
     created() {
-      Bus.$on('show_add_address', () => this.isEdit = true);
+      Bus.$on('show_add_address', () => {
+        Logger.info('show add address triggered');
+        this.isEdit = true;
+        this.setDefault();
+      });
       Bus.$on('hide_add_address', () => this.isEdit = false);
     },
     methods: {
@@ -172,6 +178,11 @@
       },
       resetData(){
         Object.assign(this.$data, this.$options.data.call(this));
+      },
+      async setDefault(){
+        const tmpCountries = await fetchCountries();
+        Logger.info(`default countries recieved in add address dialog: ${JSON.stringify(tmpCountries)}`);
+        if(!tmpCountries.error) this.defaultCountries = Object.assign([],tmpCountries);
       }
     }
   };

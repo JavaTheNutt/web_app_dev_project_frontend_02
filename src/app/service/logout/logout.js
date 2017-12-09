@@ -12,3 +12,4 @@ export const resetStore = () => {
   store.commit(profileTypes.mutations.RESET_DEFAULT_COUNTRIES);
   store.commit(authTypes.mutations.UNSET_USER);
 };
+export const unsyncFirestoreListeners = listenerPaths => listenerPaths.forEach();

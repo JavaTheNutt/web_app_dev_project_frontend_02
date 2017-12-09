@@ -67,6 +67,7 @@
   import Bus from '@/app/events/bus';
   import * as Logger from 'loglevel';
   import * as profileService from '../service/profileService';
+  import {fetchCollectionSync} from '../../service/firestore';
   import firebase from 'firebase';
   import {mapGetters} from 'vuex';
   import authTypes from '@/app/auth/vuex/types';
@@ -81,7 +82,8 @@
         confirmAddressDeletion: false,
         addressToBeDeleted: {},
         itemSaved: false,
-        confirmDeleteLoading: false
+        confirmDeleteLoading: false,
+        unsubscribeAddresses(){}
       };
     },
     computed: {
@@ -92,13 +94,14 @@
       loggedIn(newVal) {
         Logger.info('logged in watcher triggered in address details component');
         if (newVal) {
-          profileService.fetchUserReference().collection('addresses').onSnapshot(doc => {
+          fetchCollectionSync('addresses', this.snapshotUpdated);
+          /*profileService.fetchUserReference().collection('addresses').onSnapshot(doc => {
             this.addresses = [];
             doc.forEach(address => this.addresses.push(Object.assign({
               mapShown: false,
               id: address.id
             }, address.data())));
-          });
+          });*/
         }
       }
     },
@@ -129,18 +132,31 @@
       deleteAddressClicked(address) {
         this.addressToBeDeleted = address;
         this.confirmAddressDeletion = true;
+      },
+      snapshotUpdated(doc){
+        this.addresses = [];
+        doc.forEach(address => this.addresses.push(Object.assign({
+          mapShown: false,
+          id: address.id
+        }, address.data())));
       }
     },
     mounted() {
       if (this.loggedIn) {
-        profileService.fetchUserReference().collection('addresses').onSnapshot(doc => {
+        this.unsubscribeAddresses = fetchCollectionSync('addresses', this.snapshotUpdated);
+        /*profileService.fetchUserReference().collection('addresses').onSnapshot(doc => {
           this.addresses = [];
           doc.forEach(address => this.addresses.push(Object.assign({
             mapShown: false,
             id: address.id
           }, address.data())));
-        });
+        });*/
       }
+    },
+    destroyed(){
+      Logger.info('Address details card destroyed');
+      this.unsubscribeAddresses();
+      //profileService.unsyncFromCollection('addresses');
     }
   };
 </script>

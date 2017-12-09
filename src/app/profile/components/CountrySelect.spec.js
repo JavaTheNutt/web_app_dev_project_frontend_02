@@ -2,7 +2,6 @@ import CountrySelect from '@/app/profile/components/CountrySelect';
 import {shallow} from 'vue-test-utils';
 import countryList from 'country-list';
 
-const sandbox   = sinon.sandbox.create();
 const countries = countryList().getNames();
 describe('CountrySelect.vue', () => {
   let props;
@@ -25,7 +24,7 @@ describe('CountrySelect.vue', () => {
     wrapper.setData({selectedCountry: 'Ireland'});
     expect(wrapper.vm.validCountry).to.be.true;
   });
-  it('should emit a country when it is selected, if there is no button', ()=>{
+  it('should emit a country when it is selected, if there is no button', () => {
     props.hasButton = false;
     const wrapper = shallow(CountrySelect,{
       propsData: props
@@ -36,7 +35,7 @@ describe('CountrySelect.vue', () => {
     expect(wrapper.emitted().countryAdded.length).to.equal(1);
     expect(wrapper.emitted().countryAdded[0][0]).to.equal('Ireland');
   });
-  it('should wait until the button has been clicked, if there is a button', ()=>{
+  it('should wait until the button has been clicked, if there is a button', () => {
     const wrapper = shallow(CountrySelect,{
       propsData: props
     });
