@@ -10,7 +10,7 @@ describe('AddAddressDialog.vue', () => {
     getters         = {
       [authTypes.getters.getLoggedIn]: getLoggedInStub
     };
-    store           = new Vuex.store({
+    store           = new Vuex.Store({
       state: {},
       getters
     });
@@ -24,7 +24,7 @@ describe('AddAddressDialog.vue', () => {
     }]);
     expect(initialData.isEdit).to.be.false;
     expect(initialData.addresses).to.eql([]);
-    expect(initialData.addressDetails).ot.eql({});
+    expect(initialData.addressDetails).to.eql({});
     expect(initialData.formValid).to.be.false;
     expect(initialData.saveCountry).to.be.false;
     expect(initialData.loading).to.be.false;

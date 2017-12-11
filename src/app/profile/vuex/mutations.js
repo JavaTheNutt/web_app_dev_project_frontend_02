@@ -6,7 +6,7 @@ export default {
   [types.mutations.ADD_DEFAULT_COUNTRY]: (state, {country}) => {
     Logger.info(`current default countries: ${state.defaultCountries}`);
     if(!state.defaultCountries) state.defaultCountries = [];
-    if(state.defaultCountries.indexOf(country) === -1) state.defaultCountries.push(country);
+    if(state.defaultCountries.findIndex(defaultCountry => country.text === defaultCountry.text) === -1) state.defaultCountries.push(country);
   },
   [types.mutations.REMOVE_DEFAULT_COUNTRY]: (state, {countryId}) => state.defaultCountries = state.defaultCountries.filter(defaultCountry => {
     Logger.info(`testing if ${defaultCountry.id} is equal to ${countryId}`);
