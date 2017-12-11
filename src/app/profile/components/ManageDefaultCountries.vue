@@ -19,10 +19,12 @@
 <script>
   import countryList from 'country-list';
   import {fetchDoc} from '../../service/firestore';
+  import {fetchDefaultCountries} from '../service/defaultCountries';
   import {fetchCountries} from '../service/profileService';
   import types from '../vuex/types';
   import CountrySelect from './CountrySelect';
   import * as Logger from 'loglevel';
+  import {mapGetters} from 'vuex';
 
   export default {
     name: 'manage-default-countries',
@@ -37,6 +39,7 @@
       };
     },
     computed: {
+      ...mapGetters({defaultCountries: types.getters.getDefaultCountryNames}),
       filteredCountries() {
         return this.countries.filter(country => this.currentCountries.indexOf(country) === -1);
       },
@@ -67,10 +70,8 @@
         this.triggerChange();
       }
     },
-    async mounted() {
-      const defaultCountries = await fetchCountries();
-      Logger.info(`default countries: ${JSON.stringify(defaultCountries)}`);
-      this.initialCountries = Object.assign([], defaultCountries);
+    mounted() {
+      this.initialCountries = Object.assign([], this.defaultCountries);
       this.currentCountries = Object.assign([], this.initialCountries);
     }
   };

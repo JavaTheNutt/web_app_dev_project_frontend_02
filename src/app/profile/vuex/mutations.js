@@ -8,5 +8,8 @@ export default {
     if(!state.defaultCountries) state.defaultCountries = [];
     if(state.defaultCountries.indexOf(country) === -1) state.defaultCountries.push(country);
   },
-  [types.mutations.REMOVE_DEFAULT_COUNTRY]: (state, {country}) => state.defaultCountries = state.defaultCountries.filter(defaultCountry => defaultCountry !== country)
+  [types.mutations.REMOVE_DEFAULT_COUNTRY]: (state, {countryId}) => state.defaultCountries = state.defaultCountries.filter(defaultCountry => {
+    Logger.info(`testing if ${defaultCountry.id} is equal to ${countryId}`);
+    return defaultCountry.id !== countryId;
+  })
 };

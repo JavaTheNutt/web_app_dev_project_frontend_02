@@ -16,18 +16,27 @@ export const fetchSync           = (type, path, callback) => {
     return {error: err};
   }
 };
+/*export const fetchCountries = async() => {
+  try{
+    await firestore().collection('countries')
+  }
+}*/
 export const fetch = async (type, path) => {
-  const userId = fetchUserId();
-  if (userId.error) return userId;
+  Logger.info(`attempting to fetch ${type} at ${path}`);
+  const newPath = fetchBasePath(path);
+  if (newPath.error) return newPath;
+  Logger.info(`full path: ${newPath}`);
   try {
-    const basePath = `users/${userId}`;
-    const newPath = path ? `${basePath}/${path}` : basePath;
     const res =  await firestore()[type](newPath).get();
-    if(type === 'doc') return Object.assign({id: res.id}, res.data());
+    Logger.info('data assumed fetched');
+    if(type === 'doc' && res.exists) return res.data();
+    if(type === 'doc' && !res.exists) return {error: 'result does not exist'};
+    Logger.info('type is collection');
+    Logger.info(`length of collection: ${res.length}`);
     const collection  =[];
     res.forEach(elem => {
       Logger.info(`iterating through collection, current item: ${JSON.stringify(elem)}`);
-      collection.push(elem).data();
+      collection.push(Object.assign({id: elem.id}, elem.data()));
     });
     return collection;
   } catch (err) {
@@ -46,11 +55,24 @@ export const addItem = async (path, item) => {
   if(basePath.error) return basePath;
   Logger.info(`attempting to add item to: ${basePath}`);
   try {
-    await firestore().collection(basePath).add(item);
+    const res = await firestore().collection(basePath).add(item);
     Logger.info('item assumed added successfully');
-    return false;
+    return {data: Object.assign({id: res.id}, item)};
   } catch (e) {
     Logger.warn(`error occurred adding item to firebase, ${e}`);
     return {error: e};
+  }
+};
+export const removeItem = async (path, id) => {
+  const basePath = fetchBasePath(path);
+  if(basePath.error) return basePath;
+  Logger.info(`attempting to remove item ${id} from ${basePath}`);
+  try{
+    const res = await firestore().doc(`${basePath}/${id}`).delete();
+    Logger.info('item assumed deleted successfully');
+    return false;
+  }catch (err){
+    Logger.warn(`there was an error deleting from firebase, ${err}`);
+    return {error: err};
   }
 };

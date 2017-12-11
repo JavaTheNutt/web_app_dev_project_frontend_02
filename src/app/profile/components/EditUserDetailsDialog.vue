@@ -72,7 +72,7 @@
   import {updateUserName, updateUserProfilePic} from '@/app/auth/service/firebaseService';
   import FileInput from '../../widgets/fileInput/FileInput';
   import * as profileService from '../service/profileService';
-  import {addDefaultCountry} from '../service/defaultCountries';
+  import {addDefaultCountry, updateDefaultCountries} from '../service/defaultCountries';
   import ManageDefaultCountries from './ManageDefaultCountries';
 
   export default {
@@ -138,7 +138,7 @@
         return this.saveCountries();
       },
       async saveCountries() {
-        await profileService.addDefaultCountries(this.newCountries);
+        await updateDefaultCountries(this.newCountries);
         this.loading = false;
         this.isEdit = false;
       },

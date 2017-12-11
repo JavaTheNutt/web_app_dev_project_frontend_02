@@ -6,7 +6,7 @@ import types from '../vuex/types';
 import router from '@/router';
 import {syncDefaultCountries} from '@/app/profile/service/profileService';
 import {resetStore} from '../../service/logout/logout';
-import {addDefaultCountry} from '../../profile/service/defaultCountries';
+import {setDefaultCountries} from '../../profile/service/defaultCountries';
 
 const googleProvider   = new firebase.auth.GoogleAuthProvider();
 const facebookProvider = new firebase.auth.FacebookAuthProvider();
@@ -88,6 +88,7 @@ export const updateLocalProfile                           = user => {
 
   Logger.info(`details: ${JSON.stringify(details)}`);
   store.dispatch(types.actions.setUser, {userDetails: details});
+  setDefaultCountries();
   //syncDefaultCountries();
   Logger.info('user logged in to firebase, logging in locally');
   return true;
