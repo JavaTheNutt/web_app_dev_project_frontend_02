@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-layout>
       <v-flex>
-        <p class="headline text-xs-center">Welcome to your Profile page, {{firstName}}</p>
+        <p class="headline text-xs-center" id="profileHeader">Welcome to your Profile page, {{firstName}}</p>
       </v-flex>
     </v-layout>
     <v-layout row justify-center>

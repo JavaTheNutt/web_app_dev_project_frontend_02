@@ -60,7 +60,7 @@
           <v-progress-circular indeterminate color="primary" ></v-progress-circular>
         </v-flex>
         <v-flex v-if="!loading">
-          <v-btn :disabled="!formValid"  color="warning" class="white--text" @click.stop="logIn">Log In</v-btn>
+          <v-btn :disabled="!formValid"  color="warning" class="white--text" @click.stop="logIn" name="submitPasswordLoginDetails">Log In</v-btn>
         </v-flex>
       </v-layout>
       <v-layout v-if="hasError">
