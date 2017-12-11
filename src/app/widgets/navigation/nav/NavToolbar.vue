@@ -6,11 +6,11 @@
     <v-btn color="warning" @click.stop="loginClicked" v-if="!loggedIn" name="loginButton">Login</v-btn>
     <v-menu bottom left v-if="loggedIn">
       <v-btn icon slot="activator" dark>
-        <v-icon>more_vert</v-icon>
+        <v-icon id="openSignOutMenu">more_vert</v-icon>
       </v-btn>
       <v-list>
         <v-list-tile @click.stop="signOutClicked">
-          <v-list-tile-title>Sign Out</v-list-tile-title>
+          <v-list-tile-title id="clickSignOut">Sign Out</v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-menu>

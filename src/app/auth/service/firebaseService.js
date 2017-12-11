@@ -24,9 +24,7 @@ export const passwordLogin                                = async (email, passwo
   }
 };
 export const logOut                                       = () => firebase.auth().signOut();
-export const updateProfile                                = details => {
 
-};
 export const updateUserName                               = async displayName => {
   const result = await updateUserProfile({displayName});
   if (result.error) {
@@ -150,23 +148,11 @@ export const signInWithThridPartyRedirect                 = async provider => aw
 signInWithRedirect(provider);
 export const signinWithThirdPartyPopup                    = async provider => await firebase.auth().
 signInWithPopup(provider);
-export const handleAuthRedirect                           = async () => {
-  const result = await firebase.auth().getRedirectResult();
-  if (result.credential) {
-    Logger.info('redirect contains a credential');
-    return;
-  }
-  if (result.error) {
-    Logger.warn('result contains an error');
-    return;
-  }
-  Logger.info('result does not contain a credential or an error');
-};
-export const handleSignInError                            = (error, providerId) => {
+export const handleSignInError                            = async  (error, providerId) => {
   if (error.code === 'auth/account-exists-with-different-credential') {
-    return handleAuthExistsWithDifferentCredentialError(error, providerId);
+    return await handleAuthExistsWithDifferentCredentialError(error, providerId);
   }
-  return handleFirebaseError(error);
+  return handleFirebaseError(error.code);
 };
 export const handleAuthExistsWithDifferentCredentialError = async (error, providerId) => {
   Logger.info(`auth exists with different cred, error: ${JSON.stringify(error)}`);

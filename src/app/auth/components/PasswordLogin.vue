@@ -51,7 +51,9 @@
                       v-model="createAccountTicked"
                       color="info"
                       value="yes"
-                      hide-details></v-checkbox>
+                      hide-details
+                      id="createNewAccountCheckbox"
+          ></v-checkbox>
 
         </v-flex>
       </v-layout>

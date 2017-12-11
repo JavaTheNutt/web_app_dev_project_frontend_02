@@ -29,6 +29,7 @@
     "country-list": "^1.1.0",
     "email-validator": "^1.1.1",
     "firebase": "^4.6.2",
+    "firebase-admin": "^5.5.1",
     "font-awesome": "^4.7.0",
     "localforage": "^1.5.5",
     "lodash": "^4.17.4",
