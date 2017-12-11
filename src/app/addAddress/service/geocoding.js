@@ -14,11 +14,14 @@ const performFetch                = async params => {
     return {error: e};
   }
 };
-const createParams                = address => ({
+export const  createParams                = address => ({
   address,
   key: process.env.MAPS_API_KEY
 });
-const formatAddress               = ({address01, address02, address03, country}) => {
+export const formatAddress               = ({address01, address02, address03, country}) => {
+  if(!address01 || address01.length === 0 || !country || country.length === 0){
+    return {error: 'missing data'};
+  }
   Logger.info('attempting to format address');
   Logger.info(`first line: ${address01}`);
   let address = address01 + ', ';

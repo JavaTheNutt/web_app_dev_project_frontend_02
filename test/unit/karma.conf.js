@@ -3,8 +3,15 @@
 // we are also using it with karma-webpack
 //   https://github.com/webpack/karma-webpack
 
-var webpackConfig = require('../../build/webpack.test.conf')
-
+var webpackConfig = require('../../build/webpack.test.conf');
+var coverageReporters = [{type: 'lcov', subdir: '.'},{type: 'text-summary'}];
+var reporters = [
+  'spec',
+  'coverage'
+];
+if(process.env.TRAVIS){
+  reporters.push('coveralls');
+}
 module.exports = function (config) {
   config.set({
     // to run in additional browsers:
@@ -13,7 +20,7 @@ module.exports = function (config) {
     // 2. add it to the `browsers` array below.
     browsers: ['PhantomJS'],
     frameworks: ['mocha', 'sinon-chai', 'phantomjs-shim'],
-    reporters: ['spec', 'coverage', 'coveralls'],
+    reporters,
     files: ['../../node_modules/babel-polyfill/dist/polyfill.js', './index.js'],
     preprocessors: {
       './index.js': ['webpack', 'sourcemap']
@@ -24,10 +31,7 @@ module.exports = function (config) {
     },
     coverageReporter: {
       dir: './coverage',
-      reporters: [{
-        type: 'lcov',
-        subdir: '.'
-      }, {type: 'text-summary'}]
+      reporters: coverageReporters
     }
   });
 };
