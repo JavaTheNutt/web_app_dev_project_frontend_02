@@ -21,7 +21,7 @@ module.exports    = {
     setValue('input[name=passwordField]', 'wwwwww').pause(500).click('label[for=createNewAccountCheckbox]').
     waitForElementVisible('input[name=confirmPasswordField]', 1000).
     setValue('input[name=confirmPasswordField]', 'wwwwww').pause(500).click('button[name=submitPasswordLoginDetails]').
-    pause(3000).assert.containsText('#profileHeader', 'Welcome to your Profile page, unknown');
+    pause(3000).assert.containsText('#profileHeader', 'Welcome to your Profile page, unknown').end();
   }/*,
   'attempt login'(browser) {
     browser.url(devServer).waitForElementVisible('#app', 5000).waitForElementVisible('button[name=loginButton]', 1000).

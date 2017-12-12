@@ -2,6 +2,7 @@ import types from './types';
 import actions from './actions';
 import firebase from 'firebase';
 import * as firebaseService from '../service/firebaseService';
+
 const sandbox = sinon.sandbox.create();
 
 describe('auth actions', () => {
@@ -13,7 +14,7 @@ describe('auth actions', () => {
     registerAuthStateListenerStub = sandbox.stub();
     authContainer                 = {onAuthStateChanged: registerAuthStateListenerStub};
     authStub                      = sandbox.stub(firebase, 'auth').returns(authContainer);
-    testAuthStateStub = sandbox.stub(firebaseService, 'testAuthState');
+    testAuthStateStub             = sandbox.stub(firebaseService, 'testAuthState');
   });
   afterEach(() => {
     sandbox.restore();
@@ -34,6 +35,16 @@ describe('auth actions', () => {
       testAuthStateStub.returns(false);
       actions[types.actions.testCurrentAuthState]({commit: commitStub});
       expect(commitStub).to.be.calledWith(types.mutations.SET_LOGGED_IN, {isLoggedIn: false});
+    });
+  });
+  describe('set provider ids', () => {
+    let providers;
+    beforeEach(() => {
+      providers = {
+        newProviderId: 'facebook.com',
+        preferredProviderId: 'google.com',
+        credential: 'iamacredential'
+      };
     });
   });
 });
