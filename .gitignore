@@ -17,4 +17,6 @@ selenium-debug.log
 *.swp
 /tst.json
 /tst.js
+.env
 /.env
+.env/
