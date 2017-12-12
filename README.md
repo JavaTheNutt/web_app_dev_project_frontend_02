@@ -42,8 +42,12 @@ The URL for the travis project can be found [here](https://travis-ci.org/JavaThe
 
 ## Automated Deployment.
 
-The hosted application can be found [here](https://finance-tracker-1cc05.firebaseapp.com/). In order to facilitate automated deployment, the steps outliend in the travis step above will need to be completed
+The hosted application can be found [here](https://finance-tracker-1cc05.firebaseapp.com/). In order to facilitate automated deployment, the steps outliend in the travis step above will need to be completed.
 
 ## Extra features.
 
-. . . . Briefly state any extra aspects of your automation process that you feel should be high-lighted . . . . .
+This project is unit tested using the [karma test runner](https://karma-runner.github.io/1.0/index.html). This primarily uses [PhantomJS](http://phantomjs.org/) for headless browser tests, but it can also run the tests on any browser that the user has on their device, to ensure cross platform compatability.
+
+This projects end-to-end test suite is powered by [NightwatchJS](http://nightwatchjs.org/), which runs on top of the [Selenium Web Driver](http://www.seleniumhq.org/).
+
+This project also has two seperate build pipelines, one for the [Client](https://travis-ci.org/JavaTheNutt/web_app_dev_project_frontend_02) and one for the [REST API](https://travis-ci.org/JavaTheNutt/web_app_dev_project_backend). 
