@@ -34,7 +34,34 @@ To build the application for production, run `npm run build`. This will build th
 To run the full test suite, you can run `npm test`. This will run the full unit test suite, as well as the acceptance tests. 
 ## Acceptance Testing.
 
-. . . For each view of the app that has an associated acceptance test, show: (1) a screenshot of the web page (2) specify the pathname of the test file and (3) list the output from the test execution.
+Due to time constraints, and some technical issues with using Nightwatch, I was only able to include two Acceptance tests. Both are included in the same file (which can be found [here](https://github.com/JavaTheNutt/web_app_dev_project_frontend_02/blob/master/test/e2e/specs/test.js)). There is a third test which is commented out. This test also works, but I couldn't get the two to work together, as I was unable to force Firebase to log out between tests. 
+
+### Test 01 -- Checking the page title.
+This was the first test I wrote and it simply checks that the page title is as expected. I didn't include a screenshot for this, as there was not really anything to see. The output of this test can bbe seen below:
+
+```
+  Running:  open page
+   √ Element <#app> was visible after 91 milliseconds.
+   √ Testing if the page title equals "Finance Tracker".
+  
+  OK. 2 assertions passed. (19.356s)
+
+```
+
+### Test 02 -- Creating an account
+This test ran through the basic sign up process. I have included an animated GIF of the test running.
+```
+  Running:  sign up
+   √ Element <#app> was visible after 128 milliseconds.
+   √ Element <button[name=loginButton]> was visible after 93 milliseconds.
+   √ Element <input[name=emailField]> was visible after 187 milliseconds.
+   √ Element <input[name=passwordField]> was visible after 107 milliseconds.
+   √ Element <input[name=confirmPasswordField]> was visible after 217 milliseconds.
+   √ Testing if element <#profileHeader> contains text: "Welcome to your Profile page, unknown".
+  
+  OK. 6 assertions passed. (21.109s)
+```
+![acceptance test gif](./static/img/acceptance_test.gif)
 
 ## Continuous Integration.
 
